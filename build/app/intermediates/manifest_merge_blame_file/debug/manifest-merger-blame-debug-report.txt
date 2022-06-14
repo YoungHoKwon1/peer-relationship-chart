@@ -12,14 +12,14 @@
 12         to allow setting breakpoints, to provide hot reload, etc.
 13    -->
 14    <uses-permission android:name="android.permission.INTERNET" />
-14-->C:\Users\aijoa01\AndroidStudioProjects\peer_relationship_chart\android\app\src\debug\AndroidManifest.xml:6:5-66
-14-->C:\Users\aijoa01\AndroidStudioProjects\peer_relationship_chart\android\app\src\debug\AndroidManifest.xml:6:22-64
+14-->C:\Users\aijoa01\Desktop\peer_raletionship_chart\peer_relationship_chart\android\app\src\debug\AndroidManifest.xml:6:5-66
+14-->C:\Users\aijoa01\Desktop\peer_raletionship_chart\peer_relationship_chart\android\app\src\debug\AndroidManifest.xml:6:22-64
 15    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-15-->C:\Users\aijoa01\AndroidStudioProjects\peer_relationship_chart\android\app\src\main\AndroidManifest.xml:3:5-79
-15-->C:\Users\aijoa01\AndroidStudioProjects\peer_relationship_chart\android\app\src\main\AndroidManifest.xml:3:22-77
+15-->C:\Users\aijoa01\Desktop\peer_raletionship_chart\peer_relationship_chart\android\app\src\main\AndroidManifest.xml:3:5-79
+15-->C:\Users\aijoa01\Desktop\peer_raletionship_chart\peer_relationship_chart\android\app\src\main\AndroidManifest.xml:3:22-77
 16    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-16-->C:\Users\aijoa01\AndroidStudioProjects\peer_relationship_chart\android\app\src\main\AndroidManifest.xml:4:5-80
-16-->C:\Users\aijoa01\AndroidStudioProjects\peer_relationship_chart\android\app\src\main\AndroidManifest.xml:4:22-78
+16-->C:\Users\aijoa01\Desktop\peer_raletionship_chart\peer_relationship_chart\android\app\src\main\AndroidManifest.xml:4:5-80
+16-->C:\Users\aijoa01\Desktop\peer_raletionship_chart\peer_relationship_chart\android\app\src\main\AndroidManifest.xml:4:22-78
 17
 18    <application
 19        android:name="android.app.Application"

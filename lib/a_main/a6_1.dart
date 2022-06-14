@@ -31,40 +31,32 @@ class _A6_1State extends State<A6_1> {
               body: ListView(
                 children: [
                   Center(
-                    child: Text(
-                      ''
+                    child: SizedBox(
+                      width: 350.w,
+                      height: 50.w,
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor:
+                              MaterialStateProperty.all<Color>(const Color(0xffA666FB)),
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.w),
+                                  ))),
+                          onPressed: () {
+                            autoLoginStorage.delete(key: "login");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => A1()),
+                            );
+                          },
+                          child: Text(
+                            '로그아웃',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.w,
+                                fontWeight: FontWeight.w400),
+                          )),
                     ),
-                  ),
-                  Center(
-                    child: Text(
-                      ''
-                    ),
-                  ),
-                  SizedBox(
-                    width: 350.w,
-                    height: 50.w,
-                    child: ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor:
-                            MaterialStateProperty.all<Color>(const Color(0xffA666FB)),
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.w),
-                                ))),
-                        onPressed: () {
-                          autoLoginStorage.delete(key: "login");
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => A1()),
-                          );
-                        },
-                        child: Text(
-                          '로그아웃',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.w,
-                              fontWeight: FontWeight.w400),
-                        )),
                   )
                 ],
               ),
