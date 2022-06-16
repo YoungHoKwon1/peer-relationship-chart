@@ -17,6 +17,7 @@ class A6_1 extends StatefulWidget {
 
 class _A6_1State extends State<A6_1> {
   static final autoLoginStorage = FlutterSecureStorage();
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -27,7 +28,14 @@ class _A6_1State extends State<A6_1> {
                   fit: BoxFit.cover,
                   image: AssetImage('assets/backgrounds/main_page.png'),
                 )),
-            child: MenuBar(),
+            child: Scaffold(
+                backgroundColor: Colors.transparent,
+              appBar: MenuAppBar(),
+              endDrawer: MenuDrawer(),
+              body: Container(),
+
+            ),
+
             // Scaffold(
             //   appBar: MenuBar(),
             //   backgroundColor: Colors.transparent,
