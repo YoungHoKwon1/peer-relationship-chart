@@ -10,41 +10,44 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final supportedLocales = [Locale('en', 'US'), Locale('ko', 'KR')];
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await ScreenUtil.ensureScreenSize();
 
-  runApp(  EasyLocalization(
-      supportedLocales: supportedLocales,
-      path: 'assets/translations',
-      fallbackLocale: Locale('en', 'US'),
-      child: PeerRelationshipChart()),);
+  runApp(
+    EasyLocalization(
+        supportedLocales: supportedLocales,
+        path: 'assets/translations',
+        fallbackLocale: Locale('en', 'US'),
+        child: PeerRelationshipChart()),
+  );
 }
 
 class PeerRelationshipChart extends StatelessWidget {
   const PeerRelationshipChart({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) =>
-      ScreenUtilInit(
-          designSize: const Size(1240, 790),
-          builder: (ctx, child) {
-            return MaterialApp(
-              localizationsDelegates: context.localizationDelegates,
-              supportedLocales: context.supportedLocales,
-              theme: ThemeData(fontFamily: 'NotoSansKR',
-              ),
-              home: PeerRelationshipChartMain(),
-            );
-          });
+  Widget build(BuildContext context) => ScreenUtilInit(
+      designSize: const Size(1240, 790),
+      builder: (ctx, child) {
+        return MaterialApp(
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          theme: ThemeData(
+            fontFamily: 'NotoSansKR',
+          ),
+          home: PeerRelationshipChartMain(),
+        );
+      });
 }
 
 class PeerRelationshipChartMain extends StatefulWidget {
   const PeerRelationshipChartMain({Key? key}) : super(key: key);
 
   @override
-  State<PeerRelationshipChartMain> createState() => _PeerRelationshipChartMainState();
+  State<PeerRelationshipChartMain> createState() =>
+      _PeerRelationshipChartMainState();
 }
 
 class _PeerRelationshipChartMainState extends State<PeerRelationshipChartMain> {
@@ -67,15 +70,14 @@ class _PeerRelationshipChartMainState extends State<PeerRelationshipChartMain> {
     userInfo = (await autoLoginStorage.read(key: "login"));
 
     if (userInfo != null) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => A6_1()));
-    }
-    else if (userInfo == null){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => A1()));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => A6_1()));
+    } else if (userInfo == null) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => A1()));
     }
   }
 }
-
-
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -92,9 +94,9 @@ class _SplashScreenState extends State<SplashScreen> {
       child: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage('assets/backgrounds/loading_page.png'),
-            )),
+          fit: BoxFit.cover,
+          image: AssetImage('assets/backgrounds/loading_page.png'),
+        )),
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: Center(
@@ -102,12 +104,9 @@ class _SplashScreenState extends State<SplashScreen> {
               children: [
                 Container(
                   margin: EdgeInsets.only(top: 80.72.w),
-                  child:
-                  SvgPicture.asset('assets/icons/icon_aijoa_logo.svg'),
+                  child: SvgPicture.asset('assets/icons/icon_aijoa_logo.svg'),
                   width: 156.41.w,
                   height: 115.71.w,
-
-
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 32.57.w),
