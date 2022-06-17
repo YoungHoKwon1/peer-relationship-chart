@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:peer_relationship_chart/a_main/a1.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:peer_relationship_chart/c_play/c1.dart';
 import 'package:peer_relationship_chart/widjets/menu_bar.dart';
 
 
@@ -16,8 +17,6 @@ class A6_1 extends StatefulWidget {
 }
 
 class _A6_1State extends State<A6_1> {
-  static final autoLoginStorage = FlutterSecureStorage();
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -27,51 +26,46 @@ class _A6_1State extends State<A6_1> {
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   image: AssetImage('assets/backgrounds/main_page.png'),
-                )),
+                )
+            ),
             child: Scaffold(
                 backgroundColor: Colors.transparent,
               appBar: MenuAppBar(),
               endDrawer: MenuDrawer(),
-              body: Container(),
 
-            ),
+              body: ListView(
+                children: [
+                  Center(
+                    child: SizedBox(
+                      width: 350.w,
+                      height: 50.w,
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor:
+                              MaterialStateProperty.all<Color>(const Color(0xffA666FB)),
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.w),
+                                  ))),
+                          onPressed: () {
 
-            // Scaffold(
-            //   appBar: MenuBar(),
-            //   backgroundColor: Colors.transparent,
-            //   body: ListView(
-            //     children: [
-            //       Center(
-            //         child: SizedBox(
-            //           width: 350.w,
-            //           height: 50.w,
-            //           child: ElevatedButton(
-            //               style: ButtonStyle(
-            //                   backgroundColor:
-            //                   MaterialStateProperty.all<Color>(const Color(0xffA666FB)),
-            //                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            //                       RoundedRectangleBorder(
-            //                         borderRadius: BorderRadius.circular(10.w),
-            //                       ))),
-            //               onPressed: () {
-            //                 autoLoginStorage.delete(key: "login");
-            //                 Navigator.push(
-            //                   context,
-            //                   MaterialPageRoute(builder: (context) => A1()),
-            //                 );
-            //               },
-            //               child: Text(
-            //                 '로그아웃',
-            //                 style: TextStyle(
-            //                     color: Colors.white,
-            //                     fontSize: 20.w,
-            //                     fontWeight: FontWeight.w400),
-            //               )),
-            //         ),
-            //       )
-            //     ],
-            //   ),
-            // )
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => C1()),
+                            );
+                          },
+                          child: Text(
+                            '로그아웃',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.w,
+                                fontWeight: FontWeight.w400),
+                          )),
+                    ),
+                  )
+                ],
+              ),
+            )
         )
     );
   }
