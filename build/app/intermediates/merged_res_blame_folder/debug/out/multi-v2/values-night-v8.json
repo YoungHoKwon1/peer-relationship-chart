@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\src\\flutterwork\\peer_relationship_chart\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-night-v8\\values-night-v8.xml",
+            "outputFile": "C:\\Users\\aijoa01\\Desktop\\peer_raletionship_chart\\peer_relationship_chart\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-night-v8\\values-night-v8.xml",
             "map": [
                 {
-                    "source": "C:\\src\\flutterwork\\peer_relationship_chart\\android\\app\\src\\main\\res\\values-night\\styles.xml",
+                    "source": "C:\\Users\\aijoa01\\Desktop\\peer_raletionship_chart\\peer_relationship_chart\\android\\app\\src\\main\\res\\values-night\\styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",
