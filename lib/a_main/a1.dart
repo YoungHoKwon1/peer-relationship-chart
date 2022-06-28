@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,17 +8,19 @@ import 'package:peer_relationship_chart/a_main/a4_1.dart';
 import 'package:peer_relationship_chart/a_main/a6_1.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:peer_relationship_chart/retrofit/rest.dart';
+import 'package:logger/logger.dart';
 
 class A1 extends StatefulWidget {
-  const A1({Key? key,}) : super(key: key);
-
+  const A1({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<A1> createState() => _A1State();
 }
 
 class _A1State extends State<A1> {
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -79,7 +82,6 @@ class CustomLoginField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         Container(
           width: 250.w,
           // decoration: BoxDecoration(
@@ -93,9 +95,10 @@ class CustomLoginField extends StatelessWidget {
           //     ]),
           //height: 40,
           child: TextFormField(
-
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             onSaved: _onSaved,
             validator: _validator,
+            onChanged: _onSaved,
             style: TextStyle(
               fontSize: 20.w,
               fontWeight: FontWeight.w400,
@@ -149,7 +152,6 @@ class CustomLoginField extends StatelessWidget {
 class LoginPageForm extends StatefulWidget {
   const LoginPageForm({Key? key}) : super(key: key);
 
-
   @override
   State<LoginPageForm> createState() => _LoginPageFormState();
 }
@@ -159,6 +161,7 @@ class _LoginPageFormState extends State<LoginPageForm> {
 
   String ID = '';
   String PW = '';
+  String loginError = '';
   bool AutoLogin = false;
   static final autoLoginStorage = FlutterSecureStorage();
 
@@ -173,6 +176,7 @@ class _LoginPageFormState extends State<LoginPageForm> {
             (val) {
               setState(() {
                 this.ID = val;
+                loginError = "";
               });
             },
             (val) {
@@ -191,14 +195,31 @@ class _LoginPageFormState extends State<LoginPageForm> {
             (val) {
               setState(() {
                 this.PW = val;
+                print(this.PW);
+                loginError = "";
               });
             },
             (val) {
               if (val.length < 1) {
                 return '비밀번호는 필수사항입니다.';
               }
-              if (val.length < 8) {
-                return '8자 이상 입력해주세요!';
+              // if (val.length < 8) {
+              //   return '8자 이상 입력해주세요!';
+              // }
+              if (loginError == '401') {
+                print("loginError");
+                print(loginError);
+                return '이메일 혹은 비밀번호가 틀렸습니다.';
+              }
+              if (loginError == '412') {
+                print("loginError");
+                print(loginError);
+                return '이메일 형식이 잘못되었습니다.';
+              }
+              if (loginError == '500') {
+                print("loginError");
+                print(loginError);
+                return '서버에러';
               }
               return null;
             },
@@ -269,19 +290,52 @@ class _LoginPageFormState extends State<LoginPageForm> {
                 onPressed: () async {
                   if (this.formKey.currentState!.validate()) {
                     print('완료');
-                    if(AutoLogin == true){
+                    if (AutoLogin == true) {
+                      await autoLoginStorage.write(key: "id", value: this.ID);
                       await autoLoginStorage.write(
-                          key: "login",
-                          value: "id " +
-                              this.ID +
-                              " " +
-                              "password " +
-                              this.PW);
+                          key: "password", value: this.PW);
                     }
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => A6_1()),
-                    );
+                    print(this.ID);
+                    print(this.PW);
+                    Dio dio = Dio();
+                    final client = RestClient(dio);
+                    LoginForm loginForm =
+                        LoginForm(email: this.ID, password: this.PW);
+
+                    Future.microtask(() async {
+                      final response = await client
+                          .postLogin(loginForm)
+                          .catchError((Object obj) {
+                        final res = (obj as DioError).response;
+                        switch (res!.statusCode) {
+                          case 401:
+                            setState(() {
+                              loginError = '401';
+                              print(loginError);
+                            });
+                            break;
+                          case 412:
+                            setState(() {
+                              loginError = '412';
+                              print(loginError);
+                            });
+                            break;
+                          case 500:
+                            setState(() {
+                              loginError = '500';
+                              print(loginError);
+                            });
+                            break;
+                          default:
+                            break;
+                        }
+                      });
+                      await autoLoginStorage.write(key: "signInToken", value: response.token);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => A6_1()),
+                      );
+                    });
                   }
                 },
                 child: Text(

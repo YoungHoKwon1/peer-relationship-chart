@@ -1,0 +1,4 @@
+#Wed Jun 22 15:02:51 KST 2022
+base.0=C\:\\Users\\aijoa01\\Desktop\\peer_raletionship_chart\\peer_relationship_chart\\build\\app\\intermediates\\dex\\release\\minifyReleaseWithR8\\classes.dex
+renamed.0=classes.dex
+path.0=classes.dex

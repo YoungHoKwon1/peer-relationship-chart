@@ -1,0 +1,4 @@
+io/flutter/plugins/GeneratedPluginRegistrant.java
+ io.flutter.plugins.GeneratedPluginRegistrant
+com/example/peer_relationship_chart/BuildConfig.java
+ com.example.peer_relationship_chart.BuildConfig

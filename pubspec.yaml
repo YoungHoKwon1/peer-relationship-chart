@@ -31,6 +31,11 @@ dependencies:
     sdk: flutter
 
 
+  logger: ^1.1.0
+  retrofit: ^2.0.1
+  dio: ^4.0.0
+
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -56,6 +61,10 @@ dev_dependencies:
   provider: 6.0.3
   flutter_secure_storage: 5.0.2
   widget_mask: 1.0.0+0
+  retrofit_generator: ^2.0.1+1
+  build_runner: ^2.0.1
+  json_serializable: ^5.0.0
+  path: ^1.8.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -82,6 +91,7 @@ flutter:
     - assets/backgrounds/
     - assets/translations/
     - assets/icons/
+    - assets/images/b6-1/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
