@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +9,9 @@ import 'package:peer_relationship_chart/a_main/a2_1.dart';
 import 'package:peer_relationship_chart/a_main/a2_3.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:peer_relationship_chart/retrofit/rest.dart';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class A2_2 extends StatefulWidget {
   const A2_2({Key? key}) : super(key: key);
@@ -18,6 +22,10 @@ class A2_2 extends StatefulWidget {
 
 class _A2_2State extends State<A2_2> {
   final formKey = GlobalKey<FormState>();
+  SignupPageForm signPage = SignupPageForm();
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -107,70 +115,79 @@ class _A2_2State extends State<A2_2> {
                   ],
                 ),
               ),
-              SignupPageForm(key: formKey,),
-              Container(
-                width: 270.w,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 616.w,
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 110.w,
-                        ),
-                        ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Colors.transparent),
-                            elevation: MaterialStateProperty.all(0),
-                          ),
-                          onPressed: () {
-                            if(this.formKey.currentState!.validate()){
-                              formKey.currentState!.save();
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => A2_3()),
-                                );
-                              print('완료');
-                            }
-                            //   if (_isAllCheck == true) {
-                            //   Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(builder: (context) => A2_2()),
-                            //   );
-                            // }
-                          },
-                          child: Row(
-                            children: [
-                              Text(
-                                '다음',
-                                style: TextStyle(
-                                  fontSize: 26.w,
-                                  fontWeight: FontWeight.w400,
-                                  color: Color(0xff393838),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 30.w,
-                              ),
-                              SvgPicture.asset(
-                                'assets/icons/icon_next.svg',
-                                height: 14.w,
-                                width: 23.w,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 45.w,
-                    )
-                  ],
-                ),
-              )
+              SignupPageForm(
+                key: formKey,
+              ),
+              // Container(
+              //   width: 270.w,
+              //   child: Column(
+              //     children: [
+              //       SizedBox(
+              //         height: 616.w,
+              //       ),
+              //       Row(
+              //         children: [
+              //           SizedBox(
+              //             width: 110.w,
+              //           ),
+              //           ElevatedButton(
+              //             style: ButtonStyle(
+              //               backgroundColor: MaterialStateProperty.all<Color>(
+              //                   Colors.transparent),
+              //               elevation: MaterialStateProperty.all(0),
+              //             ),
+              //             onPressed: () {
+              //               if (this.formKey.currentState!.validate()) {
+              //                 formKey.currentState!.save();
+              //                 Navigator.push(
+              //                   context,
+              //                   MaterialPageRoute(builder: (context) => A2_3()),
+              //                 );
+              //                 print('완료');
+              //               }
+              //               //   if (_isAllCheck == true) {
+              //               //   Navigator.push(
+              //               //     context,
+              //               //     MaterialPageRoute(builder: (context) => A2_2()),
+              //               //   );
+              //               // }
+              //             },
+              //             child: Row(
+              //               children: [
+              //                 TextButton(
+              //
+              //                   onPressed: () {
+              //
+              //
+              //                   },
+              //                   child: Text(
+              //                     '다음',
+              //                     style: TextStyle(
+              //                       fontSize: 26.w,
+              //                       fontWeight: FontWeight.w400,
+              //                       color: Color(0xff393838),
+              //                     ),
+              //                   ),
+              //                 ),
+              //                 SizedBox(
+              //                   width: 30.w,
+              //                 ),
+              //                 SvgPicture.asset(
+              //                   'assets/icons/icon_next.svg',
+              //                   height: 14.w,
+              //                   width: 23.w,
+              //                 ),
+              //               ],
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //       SizedBox(
+              //         height: 45.w,
+              //       )
+              //     ],
+              //   ),
+              // )
             ],
           ),
         ],
@@ -184,7 +201,6 @@ class CustomSignupField extends StatelessWidget {
   final FormFieldSetter _onSaved;
   final FormFieldValidator _validator;
 
-
   const CustomSignupField(this._text, this._onSaved, this._validator);
 
   @override
@@ -194,19 +210,26 @@ class CustomSignupField extends StatelessWidget {
       validator: _validator,
       onChanged: _onSaved,
       autovalidateMode: AutovalidateMode.onUserInteraction,
+      keyboardType: _text == '연락처' ? TextInputType.number : TextInputType.text,
+      inputFormatters : [
+        _text == '연락처' ? FilteringTextInputFormatter.digitsOnly : FilteringTextInputFormatter.deny(RegExp(""))
+      ],
       style: TextStyle(
         fontSize: 20.w,
         fontWeight: FontWeight.w400,
         color: Colors.black87,
       ),
-      obscureText: _text == "비밀번호" ? true : false || _text == '비밀번호 확인' ? true : false,
+      obscureText: _text == "비밀번호"
+          ? true
+          : false || _text == '비밀번호 확인'
+              ? true
+              : false,
       decoration: InputDecoration(
         hintStyle: TextStyle(
           fontSize: 20.w,
           fontWeight: FontWeight.w400,
           color: Color(0xff838383),
         ),
-
         hintText: "$_text",
         contentPadding: EdgeInsets.symmetric(
           vertical: 0.w,
@@ -218,16 +241,13 @@ class CustomSignupField extends StatelessWidget {
 }
 
 class SignupPageForm extends StatefulWidget {
-  const SignupPageForm({Key? key }) : super(key: key);
-
-
+  const SignupPageForm({Key? key}) : super(key: key);
 
   @override
   State<SignupPageForm> createState() => _SignupPageFormState();
 }
 
 class _SignupPageFormState extends State<SignupPageForm> {
-  //final formKey = GlobalKey<FormState>();
 
   String ID = '';
   String PW = '';
@@ -235,278 +255,518 @@ class _SignupPageFormState extends State<SignupPageForm> {
   String sellPhoneNumber = '';
   String name = '';
   String confirmPW = '';
+  String emailError = '';
+  String authenticationNumberError = '';
+  String signUpError = '';
+  static final autoLoginStorage = FlutterSecureStorage();
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: widget.key,
-      child: Container(
-        height: 710.w,
-        child: Column(
-          children: [
-            SizedBox(
-              height: 140.w,
-            ),
-            Container(
-              padding: EdgeInsets.only(left: 200, right: 200),
-              child: Text(
-                'ID로 사용할 이메일을 입력하세요',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                  color: Color(0xff7744BA),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 40.w,
-            ),
-            Row(
+    return Row(
+      children: [
+        Form(
+          key: widget.key,
+          child: Container(
+            height: 710.w,
+            child: Column(
               children: [
-                Container(
-                    width: 340.w,
-                    child: CustomSignupField(
-                      '이메일(ID)',
-                          (val) {
-                        setState(() {
-                          this.ID = val;
-                        });
-                      },
-                          (val) {
-                        if (val.length < 1) {
-                          return '이메일은 필수사항입니다.';
-                        }
-                        if (!RegExp(
-                            r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
-                            .hasMatch(val)){
-                          return '이메일 형식이 아닙니다.';
-                        }
-                        return null;
-                      },
-                    )),
                 SizedBox(
-                  width: 80.w,
+                  height: 140.w,
                 ),
-                SizedBox(
-                  width: 280.w,
-                  height: 50.w,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(10)),
-                      primary: Color(0xffA666FB),
+                Container(
+                  padding: EdgeInsets.only(left: 200, right: 200),
+                  child: Text(
+                    'ID로 사용할 이메일을 입력하세요',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                      color: Color(0xff7744BA),
                     ),
-                    child: Text(
-                      '인증번호 받기',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 20.w,
-                          color: Colors.white),
-                    ),
-                    onPressed: () async {
-                      // if(this.formKey.currentState!.validate()){
-                      //   formKey.currentState!.save();
-                      //
-                      //   print('완료');
-                      // }
-
-                      print('dd');
-                      print(this.ID);
-                    },
                   ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 30.w,
-            ),
-            Row(
-              children: [
-                Container(
-                  width: 158.w,
-                  child: CustomSignupField(
-                    '인증번호 6자리',
+                ),
+                SizedBox(
+                  height: 40.w,
+                ),
+                Row(
+                  children: [
+                    Container(
+                        width: 340.w,
+                        child: CustomSignupField(
+                          '이메일(ID)',
+                          (val) {
+                            setState(() {
+                              this.ID = val;
+                              this.emailError = '';
+                            });
+                          },
+                          (val) {
+                            if (val.length < 1) {
+                              return '이메일은 필수사항입니다.';
+                            }
+                            if (!RegExp(
+                                    r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                                .hasMatch(val)) {
+                              return '이메일 형식이 아닙니다.';
+                            }
+                            if (this.emailError == '403'){
+                              return '해당 아이디가 이미 존재합니다.';
+                            }
+                            if (this.emailError == '412'){
+                              return '이메일형식이 잘못되었습니다.';
+                            }
+                            if (this.emailError == '500'){
+                              return '서버 오류';
+                            }
+                            return null;
+                          },
+                        )),
+                    SizedBox(
+                      width: 80.w,
+                    ),
+                    SizedBox(
+                      width: 280.w,
+                      height: 50.w,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(10)),
+                          primary: Color(0xffA666FB),
+                        ),
+                        child: Text(
+                          '인증번호 받기',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 20.w,
+                              color: Colors.white),
+                        ),
+                        onPressed: () async {
+                          Dio dio = Dio();
+                          final client = RestClient(dio);
+                          EmailForm emailForm = EmailForm(email: this.ID);
+                          final response = await client
+                              .postCertifyEmail(emailForm)
+                              .catchError((Object obj) {
+                            final res = (obj as DioError).response;
+                            switch (res!.statusCode) {
+                              case 403:
+                                print(403);
+                                setState(() {
+                                  this.emailError = '403';
+                                });
+
+
+                                break;
+                              case 412:
+                                print(412);
+                                setState(() {
+                                  this.emailError = '412';
+                                });
+
+                                break;
+                              case 500:
+                                print(500);
+                                setState(() {
+                                  this.emailError = '500';
+                                });
+
+                                break;
+                              default:
+                                break;
+                            }
+                          });
+                          await autoLoginStorage.write(key: "emailToken", value: response.token);
+                          print('before');
+                          print(await autoLoginStorage.read(key: "emailToken"));
+
+                        },
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 30.w,
+                ),
+                Row(
+                  children: [
+                    Container(
+                      width: 158.w,
+                      child: CustomSignupField(
+                        '인증번호 6자리',
                         (val) {
+                          setState(() {
+                            this.authenticationNumber = val;
+                            this.authenticationNumberError = '';
+                          });
+                        },
+                        (val) {
+                          if(this.authenticationNumberError == '401'){
+                            return '유효하지 않은 토큰입니다.';
+                          }
+                          if(this.authenticationNumberError == '412'){
+                            return '코드가 맞지 않습니다.';
+                          }
+                          if(this.authenticationNumberError == '419'){
+                            return '시간이 초과되었습니다.';
+                          }
+                          if(this.authenticationNumberError == '500'){
+                            return '서버문제';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20.w,
+                    ),
+                    Text(
+                      '05',
+                      style: TextStyle(
+                        fontSize: 14.w,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xff393838),
+                      ),
+                    ),
+                    Text(
+                      ':00',
+                      style: TextStyle(
+                        fontSize: 14.w,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xff393838),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 205.w,
+                    ),
+                    SizedBox(
+                      width: 170.w,
+                      height: 50.w,
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(10)),
+                          side: BorderSide(width: 1, color: Color(0xffA666FB)),
+                          primary: Color(0xffA666FB),
+                        ),
+                        onPressed: () {
+
+
+
+                        },
+                        child: Text(
+                          '인증번호 재전송',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 20.w,
+                            color: Color(0xff393838),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20.w,
+                    ),
+                    SizedBox(
+                      width: 90.w,
+                      height: 50.w,
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(10)),
+                          side: BorderSide(width: 1, color: Color(0xffA666FB)),
+                          primary: Color(0xffA666FB),
+                        ),
+                        onPressed: () async {
+
+                          Dio dio = Dio();
+                          final client = RestClient(dio);
+                          final token = await autoLoginStorage.read(key: "emailToken");
+                          final response = await client
+                              .getCertifyEmail(token.toString(), authenticationNumber)
+                              .catchError((Object obj) {
+                            final res = (obj as DioError).response;
+                            switch (res!.statusCode) {
+                              case 401:
+                                print(401);
+
+                                setState(() {
+                                  this.emailError = '401';
+                                });
+
+
+                                break;
+                              case 412:
+                                print(412);
+                                setState(() {
+                                  this.emailError = '412';
+                                });
+
+                                break;
+                              case 500:
+                                print(419);
+                                setState(() {
+                                  this.emailError = '419';
+                                });
+
+                                break;
+                              case 500:
+                                print(419);
+                                setState(() {
+                                  this.emailError = '419';
+                                });
+
+                                break;
+                              default:
+                                break;
+                            }
+                          });
+                          await autoLoginStorage.write(key: "signUpToken", value: response.token);
+                        },
+                        child: Text(
+                          '확인',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 20.w,
+                            color: Color(0xff393838),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 30.w,
+                ),
+                Container(
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 340.w,
+                        child: CustomSignupField(
+                          '연락처',
+                          (val) {
+                            setState(() {
+                              this.sellPhoneNumber = val;
+                            });
+                          },
+                          (val) {
+                            if (val.length < 1) {
+                              return '연락처를 입력하여 주세요.';
+                            }
+                            if(val.length != 11){
+                              return "'-'를 제외하여 입력해주세요.";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        width: 80.w,
+                      ),
+                      Container(
+                        width: 280.w,
+                        child: CustomSignupField(
+                          '이름',
+                          (val) {
+                            setState(() {
+                              this.name = val;
+                            });
+                          },
+                          (val) {
+                            if (val.length < 1) {
+                              return '이름을 입력하여 주세요.';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 30.w,
+                ),
+                Container(
+                  width: 700.w,
+                  child: CustomSignupField(
+                    '비밀번호',
+                    (val) {
                       setState(() {
-                        this.authenticationNumber = val;
+                        this.PW = val;
+                        print(this.PW);
                       });
                     },
-                        (val) {
+                    (val) {
+                      if (val.length < 1) {
+                        return '비밀번호를 입력하여 주세요.';
+                      } else if (val.length < 8) {
+                        return '8자 이상 입력해주세요!';
+                      } else if (!RegExp(
+                              r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?~^<>,.&+=])[A-Za-z\d$@$!%*#?~^<>,.&+=]{8,16}$')
+                          .hasMatch(val)) {
+                        return '특수문자를 포함하여 주세요.';
+                      }
                       return null;
                     },
                   ),
                 ),
                 SizedBox(
-                  width: 20.w,
+                  height: 30.w,
                 ),
-                Text(
-                  '05',
-                  style: TextStyle(
-                    fontSize: 14.w,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xff393838),
-                  ),
-                ),
-                Text(
-                  ':00',
-                  style: TextStyle(
-                    fontSize: 14.w,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xff393838),
-                  ),
-                ),
-                SizedBox(
-                  width: 205.w,
-                ),
-                SizedBox(
-                  width: 170.w,
-                  height: 50.w,
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(10)),
-                      side: BorderSide(
-                          width: 1, color: Color(0xffA666FB)),
-                      primary: Color(0xffA666FB),
-                    ),
-                    onPressed: () {},
-                    child: Text(
-                      '인증번호 재전송',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 20.w,
-                        color: Color(0xff393838),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 20.w,
-                ),
-                SizedBox(
-                  width: 90.w,
-                  height: 50.w,
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(10)),
-                      side: BorderSide(
-                          width: 1, color: Color(0xffA666FB)),
-                      primary: Color(0xffA666FB),
-                    ),
-                    onPressed: () {},
-                    child: Text(
-                      '확인',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 20.w,
-                        color: Color(0xff393838),
-                      ),
-                    ),
+                Container(
+                  width: 700.w,
+                  child: CustomSignupField(
+                    '비밀번호 확인',
+                    (val) {
+                      setState(() {
+                        this.confirmPW = val;
+                      });
+                    },
+                    (val) {
+                      if (val.length < 1) {
+                        return '비밀번호를 입력하여 주세요.';
+                      }
+                      if (val != this.PW) {
+                        return '비밀번호와 일치하지 않습니다.';
+                      }
+                      return null;
+                    },
                   ),
                 ),
               ],
             ),
-            SizedBox(
-              height: 30.w,
-            ),
-            Container(
-              child: Row(
+          ),
+        ),
+        Container(
+          width: 270.w,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 616.w,
+              ),
+              Row(
                 children: [
-                  Container(
-                    width: 340.w,
-                    child: CustomSignupField(
-                      '연락처',
-                          (val) {
-                        setState(() {
-                          this.sellPhoneNumber = val;
-                        });
-                      },
-                          (val) {
-                        if (val.length < 1) {
-                          return '연락처를 입력하여 주세요.';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
                   SizedBox(
-                    width: 80.w,
+                    width: 110.w,
                   ),
-                  Container(
-                    width: 280.w,
-                    child: CustomSignupField(
-                      '이름',
-                          (val) {
-                        setState(() {
-                          this.name = val;
-                        });
-                      },
-                          (val) {
-                        if (val.length < 1) {
-                          return '이름을 입력하여 주세요.';
-                        }
-                        return null;
-                      },
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          Colors.transparent),
+                      elevation: MaterialStateProperty.all(0),
+                    ),
+                    onPressed: () {
+                      if (this.formKey.currentState!.validate()) {
+                        formKey.currentState!.save();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => A2_3()),
+                        );
+                        print('완료');
+                      }
+                      //   if (_isAllCheck == true) {
+                      //   Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(builder: (context) => A2_2()),
+                      //   );
+                      // }
+                    },
+                    child: Row(
+                      children: [
+                        TextButton(
+
+                          onPressed: () {
+                            postSignUp();
+
+                          },
+                          child: Text(
+                            '다음',
+                            style: TextStyle(
+                              fontSize: 26.w,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xff393838),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 30.w,
+                        ),
+                        SvgPicture.asset(
+                          'assets/icons/icon_next.svg',
+                          height: 14.w,
+                          width: 23.w,
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-            ),
-            SizedBox(
-              height: 30.w,
-            ),
-            Container(
-              width: 700.w,
-              child:  CustomSignupField(
-                '비밀번호',
-                    (val) {
-                  setState(() {
-                    this.PW = val;
-                  });
-                },
-                    (val) {
-                  if (val.length < 1) {
-                    return '비밀번호를 입력하여 주세요.';
-                  }
-                  else if(val.length < 8){
-                    return '8자 이상 입력해주세요!';
-                  }
-                  else if (!RegExp(
-                      r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?~^<>,.&+=])[A-Za-z\d$@$!%*#?~^<>,.&+=]{8,16}$')
-                      .hasMatch(val)) {
-                    return '특수문자를 포함하여 주세요.';
-                  }
-                  return null;
-                },
-              ),
-            ),
-            SizedBox(
-              height: 30.w,
-            ),
-            Container(
-              width: 700.w,
-              child:  CustomSignupField(
-                '비밀번호 확인',
-                    (val) {
-                  setState(() {
-                    this.confirmPW = val;
-                  });
-                },
-                    (val) {
-                  if (val.length < 1) {
-                    return '비밀번호를 입력하여 주세요.';
-                  }
-                  if (val != this.PW){
-                    return '비밀번호와 일치하지 않습니다.';
-                  }
-                  return null;
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
+              SizedBox(
+                height: 45.w,
+              )
+            ],
+          ),
+        )
+      ],
     );
+  }
+
+  Future<void> postSignUp() async {
+
+    Dio dio = Dio();
+    final client = RestClient(dio);
+    final token = await autoLoginStorage.read(key: "signUpToken");
+    print(this.PW);
+    print(this.name);
+    print(this.sellPhoneNumber);
+    final signup = SignUp(password: this.PW, name: this.name, phoneNumber: this.sellPhoneNumber);
+    final response = await client
+        .postSignUP(token.toString(), signup)
+        .catchError((Object obj) {
+      final res = (obj as DioError).response;
+      switch (res!.statusCode) {
+        case 401:
+          print(401);
+
+          setState(() {
+            this.signUpError = '401';
+          });
+
+
+          break;
+        case 403:
+          print(403);
+          setState(() {
+            this.signUpError = '403';
+          });
+
+          break;
+        case 412:
+          print(412);
+          setState(() {
+            this.signUpError = '412';
+          });
+
+          break;
+        case 419:
+          print(419);
+          setState(() {
+            this.signUpError = '419';
+          });
+
+          break;
+        case 500:
+          print(500);
+          setState(() {
+            this.signUpError = '500';
+          });
+
+          break;
+        default:
+          break;
+      }
+    });
+    await autoLoginStorage.delete(key: "signUpToken");
+
   }
 }

@@ -1,12 +1,22 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:peer_relationship_chart/a_main/a1.dart';
 import 'package:peer_relationship_chart/a_main/a6_1.dart';
+import 'package:peer_relationship_chart/widjets/child_management.dart';
 import 'package:peer_relationship_chart/widjets/get_container_info.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import 'package:peer_relationship_chart/retrofit/rest.dart';
+import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
+
 
 final supportedLocales = [Locale('en', 'US'), Locale('ko', 'KR')];
 
@@ -16,11 +26,16 @@ void main() async {
   await ScreenUtil.ensureScreenSize();
 
   runApp(
-    EasyLocalization(
-        supportedLocales: supportedLocales,
-        path: 'assets/translations',
-        fallbackLocale: Locale('en', 'US'),
-        child: PeerRelationshipChart()),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ChildManagement(),)
+      ],
+      child: EasyLocalization(
+          supportedLocales: supportedLocales,
+          path: 'assets/translations',
+          fallbackLocale: Locale('en', 'US'),
+          child: PeerRelationshipChart()),
+    ),
   );
 }
 
@@ -42,6 +57,7 @@ class PeerRelationshipChart extends StatelessWidget {
       });
 }
 
+
 class PeerRelationshipChartMain extends StatefulWidget {
   const PeerRelationshipChartMain({Key? key}) : super(key: key);
 
@@ -51,31 +67,9 @@ class PeerRelationshipChartMain extends StatefulWidget {
 }
 
 class _PeerRelationshipChartMainState extends State<PeerRelationshipChartMain> {
-  String? userInfo; //user의 정보를 저장하기 위한 변수
-  static final autoLoginStorage = new FlutterSecureStorage();
-
   @override
   Widget build(BuildContext context) {
-    return Container();
-  }
-
-  @override
-  void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      _asyncMethod();
-    });
-  }
-
-  _asyncMethod() async {
-    userInfo = (await autoLoginStorage.read(key: "login"));
-
-    if (userInfo != null) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => A6_1()));
-    } else if (userInfo == null) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => A1()));
-    }
+    return SplashScreen();
   }
 }
 
@@ -87,6 +81,80 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  String? userID; //user의 정보를 저장하기 위한 변수
+  String? userPW;
+  static final autoLoginStorage = new FlutterSecureStorage();
+  final String localClientVersion = '0.0.1';
+
+  @override
+  void initState() {
+    Dio dio = Dio();
+    final client = RestClient(dio);
+    var logger = Logger();
+    super.initState();
+
+    Future.microtask(()  async{
+      final serverClientVersion = await client.getVersionInfo().catchError((Object obj){
+        switch(obj.runtimeType){
+          case DioError:
+            final res = (obj as DioError).response;
+            logger.e("Got error : ${res!.statusCode} -> ${res.statusMessage}");
+            break;
+          default:
+            break;
+
+        }
+      });
+      if(localClientVersion != serverClientVersion.version){
+        ExitPopupDialog(context);
+      }else{
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+          _asyncMethod();
+        });
+      }
+    });
+  }
+
+  _asyncMethod() async {
+    userID = (await autoLoginStorage.read(key: "id"));
+    userPW = (await autoLoginStorage.read(key: "password"));
+
+    Dio dio = Dio();
+    final client = RestClient(dio);
+    var logger = Logger();
+    print(userID);
+    if (userID != null) {
+      LoginForm loginForm = LoginForm(email: userID!, password: userPW!);
+      final response = await client.postLogin(loginForm).catchError((Object obj){
+        final res = (obj as DioError).response;
+        switch (res!.statusCode){
+          case 412: print(412);
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => A1()));
+          break;
+          case 401: print(401);
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => A1()));
+          break;
+          default:
+            break;
+
+        }
+        return obj.response;
+      });
+      print("dfdfdfdfd");
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => A6_1()));
+
+    }
+    else if (userID == null) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => A1()));
+
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -121,4 +189,22 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
   }
+}
+void ExitPopupDialog(BuildContext context){
+  showDialog(context: context, barrierDismissible: false,
+      builder: (BuildContext context){
+        return  AlertDialog(
+            content: Text("현재 버전이 낮아 홈페이지에서 업데이트를 진행해 주세요."),
+            actions: [
+              Center(
+                child: TextButton(
+                  child: Text("예"),
+                  onPressed: (){
+                        ()=> exit(0);
+                  },
+                ),
+              )
+            ],
+          );
+  });
 }
