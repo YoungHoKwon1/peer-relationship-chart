@@ -25,7 +25,7 @@ Map<String, dynamic> _$LoginFormToJson(LoginForm instance) => <String, dynamic>{
     };
 
 LoginToken _$LoginTokenFromJson(Map<String, dynamic> json) => LoginToken(
-      token: json['token'] as String,
+      token: json['token'] as String
     );
 
 Map<String, dynamic> _$LoginTokenToJson(LoginToken instance) =>

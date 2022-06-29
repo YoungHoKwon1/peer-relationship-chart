@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 
 part 'survey.g.dart';
 
-@RestApi(baseUrl: 'http://1.249.212.198:8080')
+@RestApi(baseUrl: 'http://192.168.0.7:8080')
 abstract class RestSurveyClient{
   factory RestSurveyClient(Dio dio, {String baseUrl}) = _RestSurveyClient;
 

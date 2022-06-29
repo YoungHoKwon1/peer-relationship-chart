@@ -1,10 +1,79 @@
+
 // ignore_for_file: camel_case_types
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:peer_relationship_chart/widjets/child_addndelete_list.dart';
 import 'b11_2.dart';
+
+List<DataColumn> _columnKidList = [
+  DataColumn(
+      label: Expanded(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text('사진'),
+          ],
+        ),
+      )),
+  DataColumn(
+      label: Expanded(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text('이름'),
+          ],
+        ),
+      )),
+  DataColumn(
+      label: Expanded(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text('생년월일'),
+          ],
+        ),
+      )),
+  DataColumn(
+      label: Expanded(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text('코멘트'),
+          ],
+        ),
+      )),
+  DataColumn(
+      label: Expanded(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text('보호자 아이디'),
+          ],
+        ),
+      )),
+  DataColumn(
+      label: Expanded(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text('학부모 이름'),
+          ],
+        ),
+      )),
+  DataColumn(
+      label: Expanded(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text('학부모 연락처'),
+          ],
+        ),
+      ))
+];
+
+List<DataRow> _rowKidList_1 = [];
 
 class B11_1 extends StatefulWidget {
   const B11_1({Key? key, required this.notifyParent}) : super(key: key);
@@ -16,14 +85,6 @@ class B11_1 extends StatefulWidget {
 
 class _B11_1State extends State<B11_1> {
   GlobalKey globalkeyCK = GlobalKey();
-
-  // void initState(){
-  //   WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-  //     widget.notifyParent!(getBoxSize(globalkeyCK), getBoxPosition(globalkeyCK));
-  //     //print(getBoxSize(globalkeyCK));
-  //     //print(getBoxPosition(globalkeyCK));
-  //   });
-  // }
 
   getBoxSize(GlobalKey key) {
     if (key.currentContext != null) {
@@ -66,7 +127,6 @@ class _B11_1State extends State<B11_1> {
                   Container(
                       margin: EdgeInsets.only(left: 579.56.w),
                       child: IconButton(
-                        //visualDensity: VisualDensity(vertical: -4.0.w),
                         onPressed: () {},
                         icon: SvgPicture.asset(
                             'assets/icons/icon_excel_download.svg'),
@@ -101,92 +161,9 @@ class _B11_1State extends State<B11_1> {
                                 const Color(0xFFFED796)),
                             dataRowHeight: 40.w,
                             headingRowHeight: 40.w,
-                            columns: [
-                              DataColumn(
-                                  label: Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Text('사진'),
-                                  ],
-                                ),
-                              )),
-                              DataColumn(
-                                  label: Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Text('이름'),
-                                  ],
-                                ),
-                              )),
-                              DataColumn(
-                                  label: Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Text('생년월일'),
-                                  ],
-                                ),
-                              )),
-                              DataColumn(
-                                  label: Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Text('코멘트'),
-                                  ],
-                                ),
-                              )),
-                              DataColumn(
-                                  label: Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Text('보호자 아이디'),
-                                  ],
-                                ),
-                              )),
-                              DataColumn(
-                                  label: Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Text('학부모 이름'),
-                                  ],
-                                ),
-                              )),
-                              DataColumn(
-                                  label: Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Text('학부모 연락처'),
-                                  ],
-                                ),
-                              ))
-                            ],
-                            rows: const [
-                              DataRow(cells: [
-                                DataCell(Center(child: Icon(Icons.home))),
-                                DataCell(Center(child: Text('김주환'))),
-                                DataCell(Center(child: Text('18-03-07'))),
-                                DataCell(Center(child: Text('코멘트작성란입니다.'))),
-                                DataCell(
-                                    Center(child: Text('aijoa12@gmail.com'))),
-                                DataCell(Center(child: Text('김주환'))),
-                                DataCell(Center(child: Text('010.1234.5678'))),
-                              ]),
-                              DataRow(cells: [
-                                DataCell(Center(child: Icon(Icons.home))),
-                                DataCell(Center(child: Text('김주환'))),
-                                DataCell(Center(child: Text('김주환'))),
-                                DataCell(Center(child: Text('김주환'))),
-                                DataCell(Center(child: Text('김주환'))),
-                                DataCell(Center(child: Text('김주환'))),
-                                DataCell(Center(child: Text('김주환'))),
-                              ]),
-                            ])
+                            columns: _columnKidList,
+                            rows: _rowKidList_1
+                            )
                       ]))),
               SizedBox(height: 194.w),
               Row(children: [
@@ -196,7 +173,7 @@ class _B11_1State extends State<B11_1> {
                   child: ElevatedButton(
                     onPressed: () {
                       debugPrint('아이 등록 및 수정');
-                      showPopUpB11_2(contextB11_1);
+                      showPopUpB11_2(contextB11_1, _rowKidList_1);
                     },
                     child: Text('아이 등록 및 수정',
                         style: TextStyle(
