@@ -78,7 +78,7 @@ class KidList with ChangeNotifier {
 
 
   void addKid() { // 아이추가
-    debugPrint('생성전: $kidNum');
+    debugPrint('생성전 아이들 수: $kidNum');
     _rowKidList.add(DataRow(cells: [
       for (int i = 0; i < 7; i++) ...[
         if (i == 0) ...[
@@ -101,7 +101,7 @@ class KidList with ChangeNotifier {
     print(kidListController[kidNum]);
     print(_rowKidList);
     kidNum++;
-    debugPrint('애들수: $kidNum');
+    debugPrint('$kidNum번째 아이');
     notifyListeners();
   }
 }
