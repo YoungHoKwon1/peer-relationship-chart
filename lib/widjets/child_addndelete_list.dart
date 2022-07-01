@@ -4,11 +4,11 @@ import 'package:peer_relationship_chart/retrofit/survey.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class KidList with ChangeNotifier {
-  static int kidNum=0;
-  List<List<TextEditingController>> kidListController = List.generate(40,
+  static  int _kidNum=0;
+  List<List<TextEditingController>> kidListController = List.generate(100,
           (i) => List.generate(7, (j) => TextEditingController()), growable: true);
-  final List<DataRow> _rowKidList = [];
-  final List<DataColumn> _columnKidList = [
+  List<DataRow> _rowKidList = [];
+  List<DataColumn> _columnKidList = [
     DataColumn(
         label: Expanded(
           child: Row(
@@ -78,7 +78,7 @@ class KidList with ChangeNotifier {
 
 
   void addKid() { // 아이추가
-    debugPrint('생성전 아이들 수: $kidNum');
+    debugPrint('생성전 아이들 수: $_kidNum');
     _rowKidList.add(DataRow(cells: [
       for (int i = 0; i < 7; i++) ...[
         if (i == 0) ...[
@@ -93,15 +93,16 @@ class KidList with ChangeNotifier {
         ] else ...[
           DataCell(Center(
               child: TextFormField(
-                controller: kidListController[kidNum][i],
+                controller: kidListController[_kidNum][i],
               ))),
         ],
       ],
     ]));
-    print(kidListController[kidNum]);
-    print(_rowKidList);
-    kidNum++;
-    debugPrint('$kidNum번째 아이');
+    //print(kidListController[_kidNum]);
+    //print(_rowKidList);
+    _kidNum++;
+    debugPrint('$_kidNum번째 아이');
     notifyListeners();
+    //print(kidListController);
   }
 }
