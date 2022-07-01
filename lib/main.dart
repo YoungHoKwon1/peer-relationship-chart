@@ -8,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:peer_relationship_chart/a_main/a1.dart';
 import 'package:peer_relationship_chart/a_main/a6_1.dart';
+import 'package:peer_relationship_chart/widjets/child_addndelete_list.dart';
+import 'package:peer_relationship_chart/widjets/child_list_provider.dart';
 import 'package:peer_relationship_chart/widjets/child_management.dart';
 import 'package:peer_relationship_chart/widjets/get_container_info.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -28,8 +30,15 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ChildManagement(),
-        )
+        ChangeNotifierProvider(
+          create: (_) => ChildManagement(),
+        ),
+        ChangeNotifierProvider(
+          create: (BuildContext contextProvider) => KidList(),
+        ),
+        // ChangeNotifierProvider(
+        //   create: (_) => ChildListProvider(),
+        // )
       ],
       child: EasyLocalization(
           supportedLocales: supportedLocales,
@@ -144,6 +153,7 @@ class _SplashScreenState extends State<SplashScreen> {
         return obj.response;
       });
       print("dfdfdfdfd");
+      await autoLoginStorage.write(key: "signInToken", value: response.token);
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => A6_1()));
 

@@ -2,142 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:peer_relationship_chart/widjets//child_addndelete_list.dart';
+import 'package:provider/provider.dart';
 
 //아이들 등록, 수정
 final _kidAddFormKey = GlobalKey<FormState>(); //TextFormField key // 추가된 아이들 수
-int kidNum = 0;
-List<DataColumn> _columnKidList = [
-  DataColumn(
-      label: Expanded(
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        Text('사진'),
-      ],
-    ),
-  )),
-  DataColumn(
-      label: Expanded(
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        Text('이름'),
-      ],
-    ),
-  )),
-  DataColumn(
-      label: Expanded(
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        Text('생년월일'),
-      ],
-    ),
-  )),
-  DataColumn(
-      label: Expanded(
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        Text('코멘트'),
-      ],
-    ),
-  )),
-  DataColumn(
-      label: Expanded(
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        Text('보호자 아이디'),
-      ],
-    ),
-  )),
-  DataColumn(
-      label: Expanded(
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        Text('학부모 이름'),
-      ],
-    ),
-  )),
-  DataColumn(
-      label: Expanded(
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        Text('학부모 연락처'),
-      ],
-    ),
-  ))
-];
-List<List<TextEditingController>> _kidListController = List.generate(7, (i) => List.generate(7, (j) => TextEditingController()), growable: true);
-List<DataRow> _rowKidList_2 = [];
-
-void _addKid(int n) {
-  // 아이추가
-  debugPrint('생성전: $n');
-  _rowKidList_2.add(DataRow(cells: [
-    for (int i = 0; i < 7; i++) ...[
-      if (i == 0) ...[
-        DataCell(Center(
-          child: InkWell(
-            child: const Icon(Icons.link),
-            onTap: () {
-              debugPrint("The icon is clicked2");
-            },
-          ),
-        )),
-      ] else ...[
-        DataCell(Center(
-            child: TextFormField(
-          controller: _kidListController[n][i],
-        ))),
-      ],
-      //print('삽입완료$n');
-    ],
-    // DataCell(Center(
-    // child: InkWell(
-    // child: const Icon(Icons.link),
-    //   onTap: () {
-    //     debugPrint("The icon is clicked2");
-    //   },
-    // ),
-    // )),
-    //
-    // // for(int i=0;i<6;i++) ...[
-    // //   ctrNum = n + (i * (0.1));
-    // //   final kidListController = TextEditingController();
-    // //   DataCell(Center(child: TextFormField()));
-    // // ],
-    // DataCell(Center(child: TextFormField())),
-    // DataCell(Center(child: TextFormField())),
-    // DataCell(Center(child: TextFormField())),
-    // DataCell(Center(child: TextFormField())),
-    // DataCell(Center(child: TextFormField())),
-    // DataCell(Center(child: TextFormField())),
-  ]));
-
-  n++;
-  kidNum = n;
-  debugPrint('애들수: $n');
-}
-
-void showPopUpB11_2(context, listview) {
+void showPopUpB11_2(context) {
   showDialog(
       context: context,
       builder: (contextB11_2) {
-        return StatefulBuilder(builder: (context, setState) {
-          return Dialog(
-            backgroundColor: Colors.transparent,
-            child: SingleChildScrollView(
-              child: Container(
-                  width: 1000,
-                  height: 550,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: const Color(0xFFFCF9F4)),
-                  child: Column(
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: SingleChildScrollView(
+            child: Container(
+                width: 1000,
+                height: 550,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: const Color(0xFFFCF9F4)),
+                child: ChangeNotifierProvider<KidList>(
+                  create: (_) => KidList(),
+                    builder: (contextProvider, child) {
+                  return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
@@ -157,8 +42,8 @@ void showPopUpB11_2(context, listview) {
                               margin: EdgeInsets.only(top: 30.w, left: 20.w),
                               decoration: BoxDecoration(
                                   color: Colors.white,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10)),
+                                  borderRadius:
+                                      const BorderRadius.all(Radius.circular(10)),
                                   border: Border.all(
                                       color: const Color(0xFFFBB348),
                                       width: 1.w)),
@@ -166,14 +51,17 @@ void showPopUpB11_2(context, listview) {
                                 Form(
                                   key: _kidAddFormKey,
                                   child: DataTable(
-                                      columnSpacing: 24.w,
-                                      headingRowColor:
-                                          MaterialStateProperty.all(
-                                              const Color(0xFFFED796)),
-                                      dataRowHeight: 40.w,
-                                      headingRowHeight: 40.w,
-                                      columns: _columnKidList,
-                                      rows: _rowKidList_2),
+                                          columnSpacing: 24.w,
+                                          headingRowColor:
+                                              MaterialStateProperty.all(
+                                                  const Color(0xFFFED796)),
+                                          dataRowHeight: 40.w,
+                                          headingRowHeight: 40.w,
+                                          columns:
+                                          contextProvider.watch<KidList>().columnKidList,
+                                          rows:
+                                          contextProvider.watch<KidList>().rowKidList
+                                          ),
                                 ),
                               ]))),
                       SizedBox(height: 42.w),
@@ -183,9 +71,7 @@ void showPopUpB11_2(context, listview) {
                           child: ElevatedButton(
                             onPressed: () {
                               debugPrint('추가');
-                              setState(() {
-                                _addKid(kidNum);
-                              });
+                              contextProvider.read<KidList>().addKid();
                             },
                             child: const Text('추가',
                                 style: TextStyle(
@@ -196,8 +82,7 @@ void showPopUpB11_2(context, listview) {
                                 onPrimary: const Color(0xFF393838),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)),
-                                side:
-                                    const BorderSide(color: Color(0xFFA666FB)),
+                                side: const BorderSide(color: Color(0xFFA666FB)),
                                 fixedSize: const Size(150, 50)),
                           ),
                         ),
@@ -206,7 +91,6 @@ void showPopUpB11_2(context, listview) {
                           child: ElevatedButton(
                             onPressed: () {
                               debugPrint('저장');
-                              listview = _rowKidList_2;
                               Navigator.pop(contextB11_2); //result 반영 dialog 종료
                             },
                             child: const Text('저장',
@@ -218,8 +102,7 @@ void showPopUpB11_2(context, listview) {
                                 onPrimary: const Color(0xFF393838),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)),
-                                side:
-                                    const BorderSide(color: Color(0xFFA666FB)),
+                                side: const BorderSide(color: Color(0xFFA666FB)),
                                 fixedSize: const Size(150, 50)),
                           ),
                         ),
@@ -239,16 +122,16 @@ void showPopUpB11_2(context, listview) {
                                 onPrimary: const Color(0xFF393838),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)),
-                                side:
-                                    const BorderSide(color: Color(0xFFA666FB)),
+                                side: const BorderSide(color: Color(0xFFA666FB)),
                                 fixedSize: const Size(150, 50)),
                           ),
                         )
                       ])
                     ],
-                  )),
+                  );
+                })
             ),
-          );
-        });
+          ),
+        );
       });
 }
