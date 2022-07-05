@@ -25,7 +25,7 @@ Map<String, dynamic> _$LoginFormToJson(LoginForm instance) => <String, dynamic>{
     };
 
 LoginToken _$LoginTokenFromJson(Map<String, dynamic> json) => LoginToken(
-      token: json['token'] as String
+      token: json['token'] as String,
     );
 
 Map<String, dynamic> _$LoginTokenToJson(LoginToken instance) =>
@@ -59,7 +59,7 @@ Map<String, dynamic> _$SignUpToJson(SignUp instance) => <String, dynamic>{
 
 class _RestClient implements RestClient {
   _RestClient(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://1.249.212.198:8080';
+    baseUrl ??= 'http://192.168.0.7:8080';
   }
 
   final Dio _dio;

@@ -15,6 +15,8 @@ import 'package:peer_relationship_chart/b_admin/b6_1.dart';
 import 'package:peer_relationship_chart/b_admin/b7_1.dart';
 import 'package:peer_relationship_chart/b_admin/b8_1.dart';
 import 'package:peer_relationship_chart/b_admin/b9.dart';
+import 'package:dio/dio.dart';
+import 'package:peer_relationship_chart/retrofit/admin.dart';
 
 import '../widjets/menu_bar.dart';
 import 'b11_1.dart';
@@ -29,17 +31,9 @@ class B2_1 extends StatefulWidget {
 }
 
 class _B2_1State extends State<B2_1> {
-  @override
-  // void initState() {
-  //   SchedulerBinding.instance!.addPostFrameCallback((_) {//위젯을 바로실행시키기 위해 이 함수가 필요하다.
-  //     showBannerDialog(
-  //       return showPopUpB1_4(context,2,3)
-  //     );
-  //   });
-  //   super.initState();
-  // }
   double boxHeight = 0;
   double boxYPosition = 0;
+  var response;
 
   void changePage(int clickPage) {
     setState(() {
@@ -69,31 +63,62 @@ class _B2_1State extends State<B2_1> {
     ];
     return (adminTabLinkList[_nowPage]);
   }
-
-  // heightAdd(double deviceHeight, double boxHeight, double boxOffset) {
-  //   if (boxOffset + boxHeight + 40.w > deviceHeight) {
-  //     return boxOffset + boxHeight + 40.w;
-  //   } else if (boxOffset + boxHeight + 40.w <= deviceHeight) {
-  //     return deviceHeight;
-  //   }
+  // void adminInfoUpdate(String _email, String _name, String _phoneNumber, String _imagePath) {
+  //   setState(() {
+  //     String email = _email;
+  //     String name = _name;
+  //     String phoneNumber = _phoneNumber;
+  //     String imagePath = _imagePath;
+  //   });
   // }
 
   @override
   void initState() {
     super.initState();
-     Future.delayed(Duration.zero, () => showPopUpB1_4(context,1,2));//시작시 회원정보확인 팝업창
-    // SchedulerBinding.instance!.addPersistentFrameCallback((timeStamp) {
-    //   showPopUpB1_4(context, 1, 2);
-    // });
+     Future.delayed(Duration.zero, () => showPopUpB1_4(context));//시작시 회원정보확인 팝업창
     setState(() {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     });
+    receiveInfo();
+  }
+  receiveInfo() async {
+    Dio dio = Dio();
+    final client = RestAdminClient(dio);
+    final token2 = await autoLoginStorage.read(key: "2CheckToken");
+    response = await client.getAdminInfo(token2.toString())
+        .catchError((Object obj) {
+      final res = (obj as DioError).response;
+      switch (res!.statusCode) {
+        case 401:
+          print('401 : 유효하지 않은 토큰2입니다.');
+          break;
+        case 403:
+          print('403 : 거부됨. 기존 토큰을 여기다가 갔다쓴경우.');
+          break;
+        case 419:
+          print('419 : 토큰이 만료되었습니다.');
+          break;
+        case 500:
+          print('500 : 서버 에러.');
+          break;
+        default:
+          break;
+      }
+      // print(obj.response);
+      // print("여기!!!!!!!!!!!!!!!!!!!!!!!");
+      return obj.response;
+    });
+    // Future<String> clresonse = client.getAdminInfo(response);
+    // convert(value) {
+    //   return Uri.encodeComponent(value.toString());
+    // }
+    // var result = convert(clresonse);
+    // print('clresponse: $result');
   }
 
   @override
   Widget build(BuildContext contextB2_1) {
     GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();//appbar없는 menubar용
-       //SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'info_basic',

@@ -1,0 +1,21 @@
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+PwdCheckForm _$PwdCheckFormFromJson(Map<String, dynamic> json) => PwdCheckForm(
+      password: json['password'] as String,
+    );
+
+Map<String, dynamic> _$PwdCheckFormToJson(PwdCheckForm instance) =>
+    <String, dynamic>{
+      'password': instance.password,
+    };
+
+Login2Token _$Login2TokenFromJson(Map<String, dynamic> json) => Login2Token(
+      token: json['token'] as String,
+    );
+
+Map<String, dynamic> _$Login2TokenToJson(Login2Token instance) =>
+    <String, dynamic>{
+      'token': instance.token,
+    };

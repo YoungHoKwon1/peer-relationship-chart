@@ -81,7 +81,7 @@ Map<String, dynamic> _$ChildInfoRidToJson(ChildInfoRid instance) =>
 
 class _RestSurveyClient implements RestSurveyClient {
   _RestSurveyClient(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://1.249.212.198:8080';
+    baseUrl ??= 'http://192.168.0.7:8080';
   }
 
   final Dio _dio;

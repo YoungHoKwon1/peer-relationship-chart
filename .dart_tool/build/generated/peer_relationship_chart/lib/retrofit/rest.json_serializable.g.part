@@ -1,0 +1,50 @@
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Versions _$VersionsFromJson(Map<String, dynamic> json) => Versions(
+      version: json['version'] as String,
+    );
+
+Map<String, dynamic> _$VersionsToJson(Versions instance) => <String, dynamic>{
+      'version': instance.version,
+    };
+
+LoginForm _$LoginFormFromJson(Map<String, dynamic> json) => LoginForm(
+      email: json['email'] as String,
+      password: json['password'] as String,
+    );
+
+Map<String, dynamic> _$LoginFormToJson(LoginForm instance) => <String, dynamic>{
+      'email': instance.email,
+      'password': instance.password,
+    };
+
+LoginToken _$LoginTokenFromJson(Map<String, dynamic> json) => LoginToken(
+      token: json['token'] as String,
+    );
+
+Map<String, dynamic> _$LoginTokenToJson(LoginToken instance) =>
+    <String, dynamic>{
+      'token': instance.token,
+    };
+
+EmailForm _$EmailFormFromJson(Map<String, dynamic> json) => EmailForm(
+      email: json['email'] as String,
+    );
+
+Map<String, dynamic> _$EmailFormToJson(EmailForm instance) => <String, dynamic>{
+      'email': instance.email,
+    };
+
+SignUp _$SignUpFromJson(Map<String, dynamic> json) => SignUp(
+      password: json['password'] as String,
+      name: json['name'] as String,
+      phoneNumber: json['phoneNumber'] as String,
+    );
+
+Map<String, dynamic> _$SignUpToJson(SignUp instance) => <String, dynamic>{
+      'password': instance.password,
+      'name': instance.name,
+      'phoneNumber': instance.phoneNumber,
+    };

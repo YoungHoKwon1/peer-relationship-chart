@@ -4,7 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:peer_relationship_chart/widjets/child_addndelete_list.dart';
+import 'package:peer_relationship_chart/widjets/child_addndelete_list_provider.dart';
 import 'b11_2.dart';
 import 'package:provider/provider.dart';
 
