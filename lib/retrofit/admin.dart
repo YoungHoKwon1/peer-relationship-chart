@@ -14,10 +14,8 @@ abstract class RestAdminClient {
       );
 
   @GET('/api/atti/admin')
-  Future<String> getAdminInfo(
+  Future<dynamic> getAdminInfo(
       @Header('authorization') String token2,
-      // @Query('admininfo') AdminInfoForm adminInfoForm,
-      // @Path('imagePath') String imageName
       );
 }
 
@@ -31,30 +29,34 @@ class PwdCheckForm{
   Map<String, dynamic> toJson() => _$PwdCheckFormToJson(this);
 }
 
+//2차 비번 인증 후 받을 2번째 토큰
 @JsonSerializable()
 class Login2Token{
   String token;
-
-
   Login2Token({
     required this.token,
-
   });
   factory Login2Token.fromJson(Map<String, dynamic> json) => _$Login2TokenFromJson(json);
   Map<String, dynamic> toJson() => _$Login2TokenToJson(this);
 }
 
+//admin정보 받을 Map
 // @JsonSerializable()
-// class AdminInfoForm{
-//   String email;
-//   String name;
-//   String phoneNumber;
-//
-//   AdminInfoForm({
-//     required this.email,
-//     required this.name,
-//     required this.phoneNumber,
-//   });
-//   factory AdminInfoForm.fromJson(Map<String, dynamic> json) => _$AdminInfoFormFromJson(json);
-//   Map<String, dynamic> toJson() => _$AdminInfoFormToJson(this);
+// class AdminInfoList{
+//   List<dynamic> admininfolist;
+//   AdminInfoList({
+//     required this.admininfolist
+// });
+//   factory AdminInfoList.fromJson(Map<String, dynamic> json) => _$AdminInfoListFromJson(json);
+//   Map<String, dynamic> toJson() => _$AdminInfoListToJson(this);
 // }
+
+@JsonSerializable()
+class AdminInfoMap{
+  Map<String, dynamic> admininfomap;
+  AdminInfoMap({
+    required this.admininfomap
+  });
+  factory AdminInfoMap.fromJson(Map<String, dynamic> json) => _$AdminInfoMapFromJson(json);
+  Map<String, dynamic> toJson() => _$AdminInfoMapToJson(this);
+}

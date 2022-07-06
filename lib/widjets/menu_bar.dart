@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:peer_relationship_chart/b_admin/b2_1.dart';
+import 'package:peer_relationship_chart/b_admin/b1_4.dart';
 import '../a_main/a1.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -15,7 +16,7 @@ class MenuDrawer extends StatefulWidget {
 class _MenuDrawerState extends State<MenuDrawer> {
   static const autoLoginStorage = FlutterSecureStorage();
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext contextMenuBar) {
     return Drawer(
       backgroundColor: Colors.transparent,
       //right side drawer
@@ -143,6 +144,7 @@ class _MenuDrawerState extends State<MenuDrawer> {
               title: const Text('계정관리'),
               onTap: () {
                 debugPrint('계정관리');
+                //showPopUpB1_4(contextMenuBar);
                 Navigator.push(
                     context, MaterialPageRoute(builder: (context) => const B2_1()));
               },

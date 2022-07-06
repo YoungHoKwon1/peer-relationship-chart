@@ -18,9 +18,16 @@ import 'package:peer_relationship_chart/b_admin/b9.dart';
 import 'package:dio/dio.dart';
 import 'package:peer_relationship_chart/retrofit/admin.dart';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../widjets/menu_bar.dart';
 import 'b11_1.dart';
 import 'b2_1_basic.dart';
+
+const adminInfoStorage = FlutterSecureStorage();
+var adminEmail;
+var adminName;
+var adminPhoneNumber;
+var adminImagePath;
 
 class B2_1 extends StatefulWidget {
   static int nowMenuNumber = 0;
@@ -33,7 +40,6 @@ class B2_1 extends StatefulWidget {
 class _B2_1State extends State<B2_1> {
   double boxHeight = 0;
   double boxYPosition = 0;
-  var response;
 
   void changePage(int clickPage) {
     setState(() {
@@ -63,14 +69,6 @@ class _B2_1State extends State<B2_1> {
     ];
     return (adminTabLinkList[_nowPage]);
   }
-  // void adminInfoUpdate(String _email, String _name, String _phoneNumber, String _imagePath) {
-  //   setState(() {
-  //     String email = _email;
-  //     String name = _name;
-  //     String phoneNumber = _phoneNumber;
-  //     String imagePath = _imagePath;
-  //   });
-  // }
 
   @override
   void initState() {
@@ -79,42 +77,50 @@ class _B2_1State extends State<B2_1> {
     setState(() {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     });
-    receiveInfo();
   }
-  receiveInfo() async {
-    Dio dio = Dio();
-    final client = RestAdminClient(dio);
-    final token2 = await autoLoginStorage.read(key: "2CheckToken");
-    response = await client.getAdminInfo(token2.toString())
-        .catchError((Object obj) {
-      final res = (obj as DioError).response;
-      switch (res!.statusCode) {
-        case 401:
-          print('401 : 유효하지 않은 토큰2입니다.');
-          break;
-        case 403:
-          print('403 : 거부됨. 기존 토큰을 여기다가 갔다쓴경우.');
-          break;
-        case 419:
-          print('419 : 토큰이 만료되었습니다.');
-          break;
-        case 500:
-          print('500 : 서버 에러.');
-          break;
-        default:
-          break;
-      }
-      // print(obj.response);
-      // print("여기!!!!!!!!!!!!!!!!!!!!!!!");
-      return obj.response;
-    });
-    // Future<String> clresonse = client.getAdminInfo(response);
-    // convert(value) {
-    //   return Uri.encodeComponent(value.toString());
-    // }
-    // var result = convert(clresonse);
-    // print('clresponse: $result');
-  }
+  // adminEmail = await adminInfoStorage.read(key: 'AdminEmail');
+  // adminName = await adminInfoStorage.read(key: 'AdminEmail');
+  // adminPhoneNumber = await adminInfoStorage.read(key: 'AdminEmail');
+  // adminImagePath = await adminInfoStorage.read(key: 'AdminEmail');
+  // receiveAdminInfo() async {
+  //   Dio dio = Dio();
+  //   final client = RestAdminClient(dio);
+  //   final token2 = await autoLoginStorage.read(key: "2CheckToken");
+  //   var response = await client.getAdminInfo(token2.toString())
+  //       .catchError((Object obj) {
+  //     final res = (obj as DioError).response;
+  //     switch (res!.statusCode) {
+  //       case 401:
+  //         print('401 : 유효하지 않은 토큰2입니다.');
+  //         break;
+  //       case 403:
+  //         print('403 : 거부됨. 기존 토큰을 여기다가 갔다쓴경우.');
+  //         break;
+  //       case 419:
+  //         print('419 : 토큰이 만료되었습니다.');
+  //         break;
+  //       case 500:
+  //         print('500 : 서버 에러.');
+  //         break;
+  //       default:
+  //         break;
+  //     }
+  //     return obj.response;
+  //   });
+  //   print('response: $response');
+  //   //print(response.values.first);
+  //   Map<String, dynamic> mapResult = Map<String, dynamic>.from(response); //_internallinkedhashmap -> Map으로 변경
+  //   adminEmail = mapResult["email"];
+  //   adminName = mapResult["name"];
+  //   adminPhoneNumber = mapResult["phoneNumber"];
+  //   adminImagePath = mapResult["imagePath"];
+  //   print(adminEmail);
+  //   print(adminName);
+  //   print(adminPhoneNumber);
+  //   print(adminImagePath);
+  //   print('get작동');
+  //
+  // }
 
   @override
   Widget build(BuildContext contextB2_1) {

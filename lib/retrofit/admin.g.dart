@@ -24,6 +24,15 @@ Map<String, dynamic> _$Login2TokenToJson(Login2Token instance) =>
       'token': instance.token,
     };
 
+AdminInfoMap _$AdminInfoMapFromJson(Map<String, dynamic> json) => AdminInfoMap(
+      admininfomap: json['admininfomap'] as Map<String, dynamic>,
+    );
+
+Map<String, dynamic> _$AdminInfoMapToJson(AdminInfoMap instance) =>
+    <String, dynamic>{
+      'admininfomap': instance.admininfomap,
+    };
+
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
@@ -56,18 +65,18 @@ class _RestAdminClient implements RestAdminClient {
   }
 
   @override
-  Future<String> getAdminInfo(token2) async {
+  Future<dynamic> getAdminInfo(token2) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'authorization': token2};
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
-    final _result = await _dio.fetch<String>(_setStreamType<String>(
+    final _result = await _dio.fetch(_setStreamType<dynamic>(
         Options(method: 'GET', headers: _headers, extra: _extra)
             .compose(_dio.options, '/api/atti/admin',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = _result.data!;
+    final value = _result.data;
     return value;
   }
 

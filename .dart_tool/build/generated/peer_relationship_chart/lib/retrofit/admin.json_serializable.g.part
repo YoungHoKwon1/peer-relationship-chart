@@ -19,3 +19,12 @@ Map<String, dynamic> _$Login2TokenToJson(Login2Token instance) =>
     <String, dynamic>{
       'token': instance.token,
     };
+
+AdminInfoMap _$AdminInfoMapFromJson(Map<String, dynamic> json) => AdminInfoMap(
+      admininfomap: json['admininfomap'] as Map<String, dynamic>,
+    );
+
+Map<String, dynamic> _$AdminInfoMapToJson(AdminInfoMap instance) =>
+    <String, dynamic>{
+      'admininfomap': instance.admininfomap,
+    };

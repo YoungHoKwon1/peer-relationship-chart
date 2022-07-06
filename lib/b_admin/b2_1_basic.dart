@@ -1,12 +1,14 @@
 // ignore_for_file: camel_case_types
 
-
+import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:peer_relationship_chart/retrofit/admin.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'b2_2.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class B2_1_Basic extends StatefulWidget {
   const B2_1_Basic({Key? key, required this.notifyParent}) : super(key: key);
@@ -16,23 +18,13 @@ class B2_1_Basic extends StatefulWidget {
   State<B2_1_Basic> createState() => _B2_1_BasicState();
 }
 
+
+
 class _B2_1_BasicState extends State<B2_1_Basic> {
-  String email = '******';
-  String name = '******';
-  String phoneNumber = '******';
-  String imagePath = '******';
-
-
-  void adminInfoUpdate(String _email, String _name, String _phoneNumber, String _imagePath) {
-    setState(() {
-      email = _email;
-      name = _name;
-      phoneNumber = _phoneNumber;
-      imagePath = _imagePath;
-    });
-  }
   GlobalKey globalkeyCK = GlobalKey();
-
+  String email = '예지몽';
+  String name = '엠씨몽';
+  String phoneNumber = '코그몽';
   getBoxSize(GlobalKey key) {
     if (key.currentContext != null) {
       final RenderBox renderBox =
@@ -41,7 +33,6 @@ class _B2_1_BasicState extends State<B2_1_Basic> {
       return sizeY;
     }
   }
-
   getBoxPosition(GlobalKey key) {
     if (key.currentContext != null) {
       final RenderBox renderBox =
@@ -51,8 +42,9 @@ class _B2_1_BasicState extends State<B2_1_Basic> {
     }
   }
 
+
   @override
-  Widget build(BuildContext contextB2_1_basic) {
+  Widget build (BuildContext contextB2_1_basic) {
     return Row(children: [
       SizedBox(width: 47.w),
       Column(
@@ -84,6 +76,7 @@ class _B2_1_BasicState extends State<B2_1_Basic> {
                   width: 375.5.w,
                   //color: Colors.red,
                   margin: EdgeInsets.fromLTRB(60.16.w, 67.w, 0.w, 0.w),
+
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -98,7 +91,7 @@ class _B2_1_BasicState extends State<B2_1_Basic> {
                                   fontSize: 20.sp))),
                       Text('연락처: $phoneNumber',
                           style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 20.sp))
+                              fontWeight: FontWeight.w500, fontSize: 20.sp)),
                     ],
                   ),
                 ),
@@ -130,7 +123,6 @@ class _B2_1_BasicState extends State<B2_1_Basic> {
                         onPressed: () {
                           debugPrint('내 정보 변경');
                           showPopUpB2_2(contextB2_1_basic, 2, 3);
-                          // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
                         },
                         child: Text('내 정보 변경',
                             style: TextStyle(
