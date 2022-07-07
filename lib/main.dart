@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:peer_relationship_chart/a_main/a1.dart';
 import 'package:peer_relationship_chart/a_main/a6_1.dart';
+import 'package:peer_relationship_chart/widjets/admin_info.dart';
 import 'package:peer_relationship_chart/widjets/child_addndelete_list_provider.dart';
 import 'package:peer_relationship_chart/widjets/child_management.dart';
 import 'package:peer_relationship_chart/widjets/get_container_info.dart';
@@ -32,12 +33,8 @@ void main() async {
         ChangeNotifierProvider(
           create: (_) => ChildManagement(),
         ),
-        ChangeNotifierProvider(
-          create: (BuildContext contextProvider) => KidList(),
-        ),
-        // ChangeNotifierProvider(
-        //   create: (_) => ChildListProvider(),
-        // )
+        ChangeNotifierProvider(create: (_) => KidList()),
+        ChangeNotifierProvider(create: (_) => AdminInfo()),
       ],
       child: EasyLocalization(
           supportedLocales: supportedLocales,

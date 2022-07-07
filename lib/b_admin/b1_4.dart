@@ -1,18 +1,19 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:peer_relationship_chart/a_main/a6_1.dart';
-import 'package:peer_relationship_chart/b_admin/b2_5.dart';
 import 'package:peer_relationship_chart/retrofit/admin.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:peer_relationship_chart/b_admin/b2_1.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:peer_relationship_chart/widjets/child_addndelete_list_provider.dart';
+import 'package:provider/provider.dart';
 
+
+import '../widjets/admin_info.dart';
 import '../widjets/menu_bar.dart';
 //admin 페이지 2차인증\
 final myControllerPwdCheck = TextEditingController();
 String pwdCheck = '';
+//String adminEmail = '';
 
 final autoLoginStorage = const FlutterSecureStorage();
 void showPopUpB1_4(context)  {
@@ -114,83 +115,134 @@ void showPopUpB1_4(context)  {
                           ]
                       ),
                       SizedBox(height: 92.w),
-                      Row(
-                        children: [
-                          SizedBox(width: 80.w),
-                          ElevatedButton(
-                            onPressed: () async {
-                              debugPrint('확인');
-                              pwdCheck = myControllerPwdCheck.text;
-                              debugPrint(pwdCheck);
-                              final token = await autoLoginStorage.read(key: "signInToken");
-                              if (pwdCheck != null) {
-                                PwdCheckForm pwdCheckForm = PwdCheckForm(password: pwdCheck);
-                                final response = await client.postPwdCheck(token!.toString(), pwdCheckForm).catchError((Object obj){
-                                  final res = (obj as DioError).response;
-                                  switch (res!.statusCode) {
-                                    case 401: print(401);
-                                    break;
-                                    case 403: print(403);
-                                    break;
-                                    case 412: print(412);
-                                    break;
-                                    case 419: print(419);
-                                    break;
-                                    case 500: print(500);
-                                    break;
-                                    default:
-                                      break;
+                          Row(
+                            children: [
+                              SizedBox(width: 80.w),
+                              ElevatedButton(
+                                onPressed: () async {
+                                  debugPrint('확인');
+                                  pwdCheck = myControllerPwdCheck.text;
+                                  debugPrint(pwdCheck);
+                                  final token = await autoLoginStorage.read(
+                                      key: "signInToken");
+                                  if (pwdCheck != null) {
+                                    PwdCheckForm pwdCheckForm = PwdCheckForm(
+                                        password: pwdCheck);
+                                    final response = await client.postPwdCheck(
+                                        token!.toString(), pwdCheckForm)
+                                        .catchError((Object obj) {
+                                      final res = (obj as DioError).response;
+                                      switch (res!.statusCode) {
+                                        case 401:
+                                          print(401);
+                                          break;
+                                        case 403:
+                                          print(403);
+                                          break;
+                                        case 412:
+                                          print(412);
+                                          break;
+                                        case 419:
+                                          print(419);
+                                          break;
+                                        case 500:
+                                          print(500);
+                                          break;
+                                        default:
+                                          break;
+                                      }
+                                      return obj.response;
+                                    });
+                                    await autoLoginStorage.write(
+                                        key: "2CheckToken",
+                                        value: response.token);
+                                    final token2 = await autoLoginStorage.read(
+                                        key: "2CheckToken");
+                                    print('admin 토큰2 : $token2');
+                                    if (token2 != null) {
+                                      String adminEmail = '';
+                                      String adminName = '';
+                                      String adminPhoneNumber = '';
+                                      String adminImagePath = '';
+                                      final token2 = await autoLoginStorage.read(key: "2CheckToken");
+                                      var response = await client.getAdminInfo(token2.toString())
+                                          .catchError((Object obj) {
+                                        final res = (obj as DioError).response;
+                                        switch (res!.statusCode) {
+                                          case 401:
+                                            print('401 : 유효하지 않은 토큰2입니다.');
+                                            break;
+                                          case 403:
+                                            print('403 : 거부됨. 기존 토큰을 여기다가 갔다쓴경우.');
+                                            break;
+                                          case 419:
+                                            print('419 : 토큰이 만료되었습니다.');
+                                            break;
+                                          case 500:
+                                            print('500 : 서버 에러.');
+                                            break;
+                                          default:
+                                            break;
+                                        }
+                                        return obj.response;
+                                      });
+                                      Map<String, dynamic> mapResult = Map<String, dynamic>.from(response); //받아온 값 _internallinkedhashmap -> Map으로 변경
+                                      adminEmail = mapResult["email"];
+                                      adminName = mapResult["name"];
+                                      adminPhoneNumber = mapResult["phoneNumber"];
+                                      adminImagePath = mapResult["imagePath"];
+
+                                      contextB1_4.read<AdminInfo>().infoUpdate(adminEmail, adminName, adminPhoneNumber, adminImagePath);//provider에 이식
+                                      Navigator.pop(contextB1_4);
+                                    }
                                   }
-                                  return obj.response;
-                                });
-                                await autoLoginStorage.write(key: "2CheckToken", value: response.token);
-                                final token2 = await autoLoginStorage.read(key: "2CheckToken");
-                                print('admin 토큰2 : $token2');
-                                if(token2 != null) {
-                                  receiveAdminInfo(contextB1_4);
-                                  Navigator.pop(contextB1_4);
-                                }
-                              }
-                              //Navigator.pop(contextB1_4);//result 반영 dialog 종료
-                              },
-                            child: Text('확인', style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w400)),
-                            style: ElevatedButton.styleFrom(
-                                elevation: 1.0,
-                                primary: const Color(0xFFFFFFFF),
-                                onPrimary: const Color(0xFF393838),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.w)
+                                },
+                                child: Text('확인', style: TextStyle(
+                                    fontSize: 20.sp,
+                                    fontWeight: FontWeight.w400)),
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 1.0,
+                                    primary: const Color(0xFFFFFFFF),
+                                    onPrimary: const Color(0xFF393838),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            10.w)
+                                    ),
+                                    side: const BorderSide(
+                                        color: Color(0xFFA666FB)
+                                    ),
+                                    fixedSize: Size(150.w, 50.w)
                                 ),
-                                side: const BorderSide(
-                                    color: Color(0xFFA666FB)
+                              ),
+                              SizedBox(width: 50.w),
+                              ElevatedButton(
+                                onPressed: () {
+                                  debugPrint('취소');
+                                  Navigator.pop(
+                                      contextB1_4); //아무내용 없이 dialog 종료
+                                  Navigator.pushReplacement(context,
+                                      MaterialPageRoute(builder: (
+                                          contextA6_1) => const A6_1()));
+                                },
+                                child: Text('취소', style: TextStyle(
+                                    fontSize: 20.sp,
+                                    fontWeight: FontWeight.w400)),
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 1.0,
+                                    primary: const Color(0xFFFFFFFF),
+                                    onPrimary: const Color(0xFF393838),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10)
+                                    ),
+                                    side: const BorderSide(
+                                        color: Color(0xFFA666FB)
+                                    ),
+                                    fixedSize: Size(150.w, 50.w)
                                 ),
-                                fixedSize: Size(150.w,50.w)
-                            ),
-                          ),
-                          SizedBox(width: 50.w),
-                          ElevatedButton(
-                            onPressed: () {
-                              debugPrint('취소');
-                              Navigator.pop(contextB1_4);//아무내용 없이 dialog 종료
-                              Navigator.pushReplacement(context,MaterialPageRoute(builder: (contextA6_1) => const A6_1()));
-                              },
-                            child: Text('취소', style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w400)),
-                            style: ElevatedButton.styleFrom(
-                                elevation: 1.0,
-                                primary: const Color(0xFFFFFFFF),
-                                onPrimary: const Color(0xFF393838),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)
-                                ),
-                                side: const BorderSide(
-                                    color: Color(0xFFA666FB)
-                                ),
-                                fixedSize: Size(150.w,50.w)
-                            ),
-                          ),
-                          SizedBox(width: 151.w)
-                        ],
-                      )
+                              ),
+                              SizedBox(width: 151.w)
+                            ],
+                          )
                     ],
                   ),
                   //SizedBox(width: 130)
@@ -201,45 +253,4 @@ void showPopUpB1_4(context)  {
         );
       }
   );
-}
-receiveAdminInfo(context) async {
-  String adminEmail = '';
-  String adminName = '';
-  String adminPhoneNumber = '';
-  String adminImagePath = '';
-  Dio dio = Dio();
-  final client = RestAdminClient(dio);
-  final token2 = await autoLoginStorage.read(key: "2CheckToken");
-  var response = await client.getAdminInfo(token2.toString())
-      .catchError((Object obj) {
-    final res = (obj as DioError).response;
-    switch (res!.statusCode) {
-      case 401:
-        print('401 : 유효하지 않은 토큰2입니다.');
-        break;
-      case 403:
-        print('403 : 거부됨. 기존 토큰을 여기다가 갔다쓴경우.');
-        break;
-      case 419:
-        print('419 : 토큰이 만료되었습니다.');
-        break;
-      case 500:
-        print('500 : 서버 에러.');
-        break;
-      default:
-        break;
-    }
-    return obj.response;
-  });
-  print('response: $response'); //{email: thkim0425@hanmail.net, name: 홍길동, phoneNumber: 010-0000-0000, imagePath: }
-  Map<String, dynamic> mapResult = Map<String, dynamic>.from(response); //_internallinkedhashmap -> Map으로 변경
-  print('mapResult: $mapResult');//{email: thkim0425@hanmail.net, name: 홍길동, phoneNumber: 010-0000-0000, imagePath: }
-  adminEmail = mapResult["email"];
-  adminName = mapResult["name"];
-  adminPhoneNumber = mapResult["phoneNumber"];
-  adminImagePath = mapResult["imagePath"];
-  print('adminEmail: $adminEmail');
-  print('adminName: $adminName');
-  print('adminPhoneNumber: $adminPhoneNumber');
-  print('adminImagePath: $adminImagePath');
 }

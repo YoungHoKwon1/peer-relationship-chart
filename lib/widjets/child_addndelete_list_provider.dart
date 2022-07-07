@@ -1,14 +1,12 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:peer_relationship_chart/retrofit/survey.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 
 class KidList with ChangeNotifier {
   static  int _kidNum=0;
   List<List<TextEditingController>> kidListController = List.generate(100,
           (i) => List.generate(7, (j) => TextEditingController()), growable: true);
-  List<DataRow> _rowKidList = [];
-  List<DataColumn> _columnKidList = [
+   List<DataRow> _rowKidList = [];
+   List<DataColumn> _columnKidList = [
     DataColumn(
         label: Expanded(
           child: Row(
