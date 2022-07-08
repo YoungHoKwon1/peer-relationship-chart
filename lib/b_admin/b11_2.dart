@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 //아이들 등록, 수정
 final _kidAddFormKey = GlobalKey<FormState>(); //TextFormField key // 추가된 아이들 수
+
 void showPopUpB11_2(context) {
   showDialog(
       context: context,
@@ -71,6 +72,7 @@ void showPopUpB11_2(context) {
                           child: ElevatedButton(
                             onPressed: () {
                               debugPrint('추가');
+                              //Provider.of<KidList>(contextProvider, listen: false).addKid();
                               contextProvider.read<KidList>().addKid();
                             },
                             child: const Text('추가',

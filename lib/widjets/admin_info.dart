@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//admin 첫페이지 정보 뿌려주는 용도
 class AdminInfo with ChangeNotifier {
   String _email = "";
   String _name = '';

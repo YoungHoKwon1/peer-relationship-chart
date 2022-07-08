@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 part 'admin.g.dart';
-
+//flutter pub run build_runner build
 @RestApi(baseUrl: 'http://192.168.0.7:8080')
 abstract class RestAdminClient {
   factory RestAdminClient(Dio dio, {String baseUrl}) = _RestAdminClient;
@@ -16,6 +16,11 @@ abstract class RestAdminClient {
   @GET('/api/atti/admin')
   Future<dynamic> getAdminInfo(
       @Header('authorization') String token2,
+      );
+
+  @GET('/api/atti/child')
+  Future<dynamic> getChildInfo(
+      @Header('authorization') String token,
       );
 }
 

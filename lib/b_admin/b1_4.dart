@@ -176,7 +176,7 @@ void showPopUpB1_4(context)  {
                                             print('403 : 거부됨. 기존 토큰을 여기다가 갔다쓴경우.');
                                             break;
                                           case 419:
-                                            print('419 : 토큰이 만료되었습니다.');
+                                            print('419 : 토큰2이 만료되었습니다.');
                                             break;
                                           case 500:
                                             print('500 : 서버 에러.');
@@ -186,6 +186,7 @@ void showPopUpB1_4(context)  {
                                         }
                                         return obj.response;
                                       });
+                                      //print(response.runtimeType); //_InternalLinkedHashMap<String, dynamic>
                                       Map<String, dynamic> mapResult = Map<String, dynamic>.from(response); //받아온 값 _internallinkedhashmap -> Map으로 변경
                                       adminEmail = mapResult["email"];
                                       adminName = mapResult["name"];

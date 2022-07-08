@@ -30,9 +30,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => ChildManagement(),
-        ),
+        ChangeNotifierProvider(create: (_) => ChildManagement()),
         ChangeNotifierProvider(create: (_) => KidList()),
         ChangeNotifierProvider(create: (_) => AdminInfo()),
       ],

@@ -18,6 +18,7 @@ class B11_1 extends StatefulWidget {
 
 class _B11_1State extends State<B11_1> {
   GlobalKey globalkeyCK = GlobalKey();
+  final _kidAddFormKey = GlobalKey<FormState>();
 
   getBoxSize(GlobalKey key) {
     if (key.currentContext != null) {
@@ -87,24 +88,44 @@ class _B11_1State extends State<B11_1> {
                               const BorderRadius.all(Radius.circular(10)),
                           border: Border.all(
                               color: const Color(0xFFFBB348), width: 1.w)),
-                      child: ChangeNotifierProvider<KidList>(
-                        create: (_) => KidList(),
-                        builder: (contextProvider, child) {
-                        return ListView(children: [
-                          DataTable(
+                      child:
+                      // ChangeNotifierProvider<KidList>(
+                      //   create: (_) => KidList(),
+                      //   builder: (contextProvider, child) {
+                      //   return
+                      //     ListView(children: [
+                      //     DataTable(
+                      //         columnSpacing: 24.w,
+                      //         headingRowColor: MaterialStateProperty.all(
+                      //             const Color(0xFFFED796)),
+                      //         dataRowHeight: 40.w,
+                      //         headingRowHeight: 40.w,
+                      //         columns:
+                      //         contextProvider.watch<KidList>().columnKidList,
+                      //         rows:
+                      //         contextProvider.watch<KidList>().rowKidList
+                      //         )
+                      //   ]);
+                      //   },
+                      // )
+                      ListView(children: [
+                        Form(
+                          key: _kidAddFormKey,
+                          child: DataTable(
                               columnSpacing: 24.w,
                               headingRowColor: MaterialStateProperty.all(
                                   const Color(0xFFFED796)),
                               dataRowHeight: 40.w,
                               headingRowHeight: 40.w,
                               columns:
-                              contextProvider.watch<KidList>().columnKidList,
+                              contextB11_1.watch<KidList>().columnKidList,
                               rows:
-                              contextProvider.watch<KidList>().rowKidList
-                              )
-                        ]);
-                        },
-                      ))),
+                              contextB11_1.watch<KidList>().rowKidList
+                          ),
+                        )
+                      ])
+                  )
+              ),
               SizedBox(height: 194.w),
               Row(children: [
                 SizedBox(
