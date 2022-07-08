@@ -14,7 +14,7 @@ class KidList extends ChangeNotifier {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: const [
-          Text('id'),
+          Text('사진'),
         ],
       ),
     )),
@@ -54,15 +54,6 @@ class KidList extends ChangeNotifier {
         ],
       ),
     )),
-    DataColumn(
-        label: Expanded(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Text('사진'),
-        ],
-      ),
-    )),
   ];
 
   List<DataRow> get rowKidList => _rowKidList;
@@ -73,11 +64,8 @@ class KidList extends ChangeNotifier {
     // 아이추가
     debugPrint('생성전 아이들 수: $_kidNum');
     _rowKidList.add(DataRow(cells: [
-      for (int i = 0; i < 6; i++) ...[
-          DataCell(
-              Center(child: TextFormField(controller: kidListController[_kidNum][i],
-              )
-              )
+      for (int i = 0; i < 5; i++) ...[
+          DataCell(Center(child: TextFormField(controller: kidListController[_kidNum][i],))
           ),
 
       ],
@@ -122,40 +110,23 @@ class KidList extends ChangeNotifier {
   // DataCell(Center(child: Text('나서스카서스녹서스'))),
   // DataCell(Center(child: Text('나서스카서스녹서스'))),
   // ]),
-  void clearKid() {
+  void clearKid() { //Clean: Datatable
     _rowKidList.clear();
   }
 
   void getKid(List list) {
-    print("getkidlist: $list");
+   // print("getkidlist: $list");
     _kidNum++;
     debugPrint('$_kidNum번째 아이');
     _rowKidList.add(DataRow(cells: [
-      for (int i = 0; i < 6; i++) ...[
+      for (int i = 0; i < 5; i++) ...[
         if (i == 0) ...[
-          DataCell(Center(child: Text(list[i].toString()))),
+          DataCell(Center(child: list[i])),//사진입력
         ] else ...[
           DataCell(Center(child: Text(list[i]))),
         ]
       ]]
     ));
-
-    // List<DataCell> _cells = [];
-    // for(int i =0; i<6;i++) {
-    //   print(list[i]);
-    //   if(i==0) {
-    //     _cells.add(DataCell(Center(child: Text(list[i].toString()))),);
-    //   }
-    //   else {
-    //     _cells.add(DataCell(Center(child: Text(list[i]))),);
-    //   }
-    //   // print(_cells);
-    // }
-    //print('_cells: $_cells');
-    //_rowKidList.add(DataRow(cells: _cells));
-    //print('리스트삽입완료');
-    print('삽입후 _rowKidList: $_rowKidList');
-    //print(_columnKidList);
     notifyListeners();
   }
 }

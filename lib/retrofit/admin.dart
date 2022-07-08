@@ -22,6 +22,11 @@ abstract class RestAdminClient {
   Future<dynamic> getChildInfo(
       @Header('authorization') String token,
       );
+  @GET('{imagePath}')
+  Future<dynamic> getChildImage(
+      @Header('authorization') String token,
+      @Path('imagePath') String imageName,
+      );
 }
 
 @JsonSerializable()

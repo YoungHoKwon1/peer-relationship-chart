@@ -129,14 +129,14 @@ class _B11_1State extends State<B11_1> {
               SizedBox(height: 194.w),
               Row(children: [
                 SizedBox(
-                  width: 260.w,
+                  width: 183.w,
                   height: 50.w,
                   child: ElevatedButton(
                     onPressed: () {
-                      debugPrint('아이 등록 및 수정');
+                      debugPrint('아이 등록');
                       showPopUpB11_2(contextB11_1);
                     },
-                    child: Text('아이 등록 및 수정',
+                    child: Text('아이 등록',
                         style: TextStyle(
                             fontWeight: FontWeight.w500, fontSize: 20.w)),
                     style: ElevatedButton.styleFrom(
@@ -149,7 +149,27 @@ class _B11_1State extends State<B11_1> {
                   ),
                 ),
                 Container(
-                  width: 260.w,
+                  width: 183.w,
+                  height: 50.w,
+                  margin: EdgeInsets.only(left: 40.w),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      debugPrint('아이 수정');
+                    },
+                    child: Text('아이 수정',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 20.w)),
+                    style: ElevatedButton.styleFrom(
+                        elevation: 1.0,
+                        primary: const Color(0xFFA666FB),
+                        onPrimary: const Color(0xFFFFFFFF),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        fixedSize: Size(200.w, 50.w)),
+                  ),
+                ),
+                Container(
+                  width: 183.w,
                   height: 50.w,
                   margin: EdgeInsets.only(left: 40.w),
                   child: ElevatedButton(
@@ -169,9 +189,9 @@ class _B11_1State extends State<B11_1> {
                   ),
                 ),
                 Container(
-                  width: 260.w,
+                  width: 183.w,
                   height: 50.w,
-                  margin: EdgeInsets.only(left: 40.w),
+                  margin: EdgeInsets.only(left: 40.w, right: 50.w),
                   child: ElevatedButton(
                     onPressed: () {
                       debugPrint('아이 등록 해제');

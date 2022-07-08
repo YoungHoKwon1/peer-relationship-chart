@@ -206,13 +206,9 @@ class _ListViewInfoState extends State<ListViewInfo> {
                               padding: const EdgeInsets.only(bottom: 35)),
                           onPressed: () async {
                             if (i == 5) {
-                              //유치원 아이들
-                              //print('유치원 아이들 클릭');
-                              //childInfo(contextProvider);
                               Dio dio = Dio();
                               final client = RestAdminClient(dio);
                               final token = await autoLoginStorage.read(key: "signInToken");
-                              //print('token: $token');
                               final response =
                                   await client.getChildInfo(token.toString()).catchError((Object obj) {
                                 final res = (obj as DioError).response;
@@ -231,22 +227,46 @@ class _ListViewInfoState extends State<ListViewInfo> {
                                 }
                                 return obj.response;
                               });
-                              //print(response.runtimeType);//List<dynamic>
-                              //print('response: $response');
                               Provider.of<KidList>(context, listen: false).clearKid();
-                              print('최초 _rowKidList: ${Provider.of<KidList>(context, listen: false).rowKidList}');
                               for (Map value in response) {
-                                //print(value);         // {identification: 1, name: 권민정, birthday: 2016-12-07, sex: 남, comment: 잘웃음, imagePath: api/atti/image/6세 김서우_1657070632194.jpg}
-                                //print(value.values);  // (1, 권민정, 2016-12-07, 남, 잘웃음, api/atti/image/6세 김서우_1657070632194.jpg)
-                                //print(value.values.runtimeType);
-                                List list1 = value.values.toList();//List<dynamic>
+                                // final responseImg = await client.getChildImage(token.toString(), "/" + value['imagePath'])
+                                //     .catchError((Object obj) {
+                                //   final res = (obj as DioError).response;
+                                //   switch (res!.statusCode) {
+                                //     case 401:
+                                //       print('401 : 유효하지 않은 토큰21입니다.');
+                                //       break;
+                                //     case 419:
+                                //       print('419 : 토큰이 만료되었습니다.');
+                                //       break;
+                                //     case 500:
+                                //       print('500 : 서버 에러.');
+                                //       break;
+                                //     default:
+                                //       break;
+                                //   }
+                                //   return obj.response;
+                                // });
+                                List<dynamic> list1 =[];
+                                Map<String, String> headers = new Map();
+                                headers['authorization'] = token!;
+                                Image childImage = Image.network("http://192.168.0.7:8080/" + value['imagePath'], headers: headers,);
+                                //print('type: ${responseImg.runtimeType}');
+                                //print('responseImg: ${responseImg.toString()}');
+                                //print(responseImg);
+                                //list1.add(value['imagePath']);
+                                list1.add(childImage);
+                                list1.add(value['name']);
+                                list1.add(value['birthday']);
+                                list1.add(value['sex']);
+                                list1.add(value['comment']);
                                 //print(list1.runtimeType);
                                 //print('list1: $list1');
                                 // contextProvider.read<KidList>().getKid(list1);
                                 Provider.of<KidList>(context, listen: false).getKid(list1);
                                 print('');
                               }
-                              print('최종 _rowKidList: ${Provider.of<KidList>(context, listen: false).rowKidList}');
+                              //print('최종 _rowKidList: ${Provider.of<KidList>(context, listen: false).rowKidList}');
                               widget.notifyParent!(i);
                             }
                             widget.notifyParent!(i);
