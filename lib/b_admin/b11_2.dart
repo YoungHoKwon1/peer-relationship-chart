@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:peer_relationship_chart/widjets//child_addndelete_list_provider.dart';
 import 'package:provider/provider.dart';
 
-//아이들 등록, 수정
+//아이 등록
 final _kidAddFormKey = GlobalKey<FormState>(); //TextFormField key // 추가된 아이들 수
 
 void showPopUpB11_2(context) {
@@ -27,9 +27,9 @@ void showPopUpB11_2(context) {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        margin: EdgeInsets.fromLTRB(414.w, 47.w, 0.w, 0.w),
+                        margin: EdgeInsets.fromLTRB(444.w, 47.w, 0.w, 0.w),
                         child: Text(
-                          '아이 등록 및 수정',
+                          '아이 등록',
                           style: TextStyle(
                               fontSize: 24.sp,
                               fontWeight: FontWeight.w400,

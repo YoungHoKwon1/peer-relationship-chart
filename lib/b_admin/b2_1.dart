@@ -25,7 +25,7 @@ import '../widjets/menu_bar.dart';
 import 'b11_1.dart';
 import 'b2_1_basic.dart';
 
-const adminInfoStorage = FlutterSecureStorage();
+const autoLoginStorage = FlutterSecureStorage();
 
 class B2_1 extends StatefulWidget {
   static int nowMenuNumber = 0;
@@ -229,44 +229,18 @@ class _ListViewInfoState extends State<ListViewInfo> {
                               });
                               Provider.of<KidList>(context, listen: false).clearKid();
                               for (Map value in response) {
-                                // final responseImg = await client.getChildImage(token.toString(), "/" + value['imagePath'])
-                                //     .catchError((Object obj) {
-                                //   final res = (obj as DioError).response;
-                                //   switch (res!.statusCode) {
-                                //     case 401:
-                                //       print('401 : 유효하지 않은 토큰21입니다.');
-                                //       break;
-                                //     case 419:
-                                //       print('419 : 토큰이 만료되었습니다.');
-                                //       break;
-                                //     case 500:
-                                //       print('500 : 서버 에러.');
-                                //       break;
-                                //     default:
-                                //       break;
-                                //   }
-                                //   return obj.response;
-                                // });
                                 List<dynamic> list1 =[];
                                 Map<String, String> headers = new Map();
                                 headers['authorization'] = token!;
-                                Image childImage = Image.network("http://192.168.0.7:8080/" + value['imagePath'], headers: headers,);
-                                //print('type: ${responseImg.runtimeType}');
-                                //print('responseImg: ${responseImg.toString()}');
-                                //print(responseImg);
-                                //list1.add(value['imagePath']);
+                                Image childImage = Image.network("http://192.168.0.7:8080/" + value['imagePath'], headers: headers,height: 70.w, width: 70.w, fit: BoxFit.cover,);
                                 list1.add(childImage);
                                 list1.add(value['name']);
                                 list1.add(value['birthday']);
                                 list1.add(value['sex']);
                                 list1.add(value['comment']);
-                                //print(list1.runtimeType);
-                                //print('list1: $list1');
-                                // contextProvider.read<KidList>().getKid(list1);
-                                Provider.of<KidList>(context, listen: false).getKid(list1);
-                                print('');
+                                Provider.of<KidList>(context, listen: false).getKid(list1); //provider 송금
                               }
-                              //print('최종 _rowKidList: ${Provider.of<KidList>(context, listen: false).rowKidList}');
+                              print('최종 _rowKidList: ${Provider.of<KidList>(context, listen: false).rowKidList}');
                               widget.notifyParent!(i);
                             }
                             widget.notifyParent!(i);
@@ -299,37 +273,4 @@ class _ListViewInfoState extends State<ListViewInfo> {
       ],
     );
   }
-}
-
-void childInfo(contextProvider) async {
-  // Dio dio = Dio();
-  // final client = RestAdminClient(dio);
-  // final token = await autoLoginStorage.read(key: "signInToken");
-  // //print('token: $token');
-  // final response =
-  //     await client.getChildInfo(token.toString()).catchError((Object obj) {
-  //   final res = (obj as DioError).response;
-  //   switch (res!.statusCode) {
-  //     case 401:
-  //       print('401 : 유효하지 않은 토큰21입니다.');
-  //       break;
-  //     case 419:
-  //       print('419 : 토큰이 만료되었습니다.');
-  //       break;
-  //     case 500:
-  //       print('500 : 서버 에러.');
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  //   return obj.response;
-  // });
-  // //print('response: $response');
-  // for (Map value in response) {
-  //   //print(value);         // {identification: 1, name: 권민정, birthday: 2016-12-07, sex: 남, comment: 잘웃음, imagePath: api/atti/image/6세 김서우_1657070632194.jpg}
-  //   //print(value.values);  // (1, 권민정, 2016-12-07, 남, 잘웃음, api/atti/image/6세 김서우_1657070632194.jpg)
-  //   List list1 = value.values.toList();
-  //   print(list1);
-  //   contextProvider.read<KidList>().getKid(list1);
-  // }
 }

@@ -1,12 +1,19 @@
-
 // ignore_for_file: camel_case_types
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:peer_relationship_chart/widjets/child_addndelete_list_provider.dart';
+import '../retrofit/admin.dart';
 import 'b11_2.dart';
+import 'b11_2_update.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import 'b11_2_update.dart';
+
+const autoLoginStorage = FlutterSecureStorage();
 
 class B11_1 extends StatefulWidget {
   const B11_1({Key? key, required this.notifyParent}) : super(key: key);
@@ -76,141 +83,131 @@ class _B11_1State extends State<B11_1> {
                 ],
               ),
             ),
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              SingleChildScrollView(
-                  child: Container(
-                      width: 860.w,
-                      height: 275.w,
-                      margin: EdgeInsets.only(top: 30.w),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                          border: Border.all(
-                              color: const Color(0xFFFBB348), width: 1.w)),
-                      child:
-                      // ChangeNotifierProvider<KidList>(
-                      //   create: (_) => KidList(),
-                      //   builder: (contextProvider, child) {
-                      //   return
-                      //     ListView(children: [
-                      //     DataTable(
-                      //         columnSpacing: 24.w,
-                      //         headingRowColor: MaterialStateProperty.all(
-                      //             const Color(0xFFFED796)),
-                      //         dataRowHeight: 40.w,
-                      //         headingRowHeight: 40.w,
-                      //         columns:
-                      //         contextProvider.watch<KidList>().columnKidList,
-                      //         rows:
-                      //         contextProvider.watch<KidList>().rowKidList
-                      //         )
-                      //   ]);
-                      //   },
-                      // )
-                      ListView(children: [
-                        Form(
-                          key: _kidAddFormKey,
-                          child: DataTable(
-                              columnSpacing: 24.w,
-                              headingRowColor: MaterialStateProperty.all(
-                                  const Color(0xFFFED796)),
-                              dataRowHeight: 40.w,
-                              headingRowHeight: 40.w,
-                              columns:
-                              contextB11_1.watch<KidList>().columnKidList,
-                              rows:
-                              contextB11_1.watch<KidList>().rowKidList
+            ChangeNotifierProvider<KidList>(
+                create: (_) => KidList(),
+                builder: (context, child) {
+                  return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SingleChildScrollView(
+                            child: Container(
+                                width: 860.w,
+                                height: 275.w,
+                                margin: EdgeInsets.only(top: 30.w),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(10)),
+                                    border: Border.all(
+                                        color: const Color(0xFFFBB348),
+                                        width: 1.w)),
+                                child: ListView(children: [
+                                  Form(
+                                    key: _kidAddFormKey,
+                                    child: DataTable(
+                                        columnSpacing: 24.w,
+                                        headingRowColor:
+                                            MaterialStateProperty.all(
+                                                const Color(0xFFFED796)),
+                                        dataRowHeight: 40.w,
+                                        headingRowHeight: 40.w,
+                                        columns:
+                                        contextB11_1.watch<KidList>().columnKidList,
+                                        rows:
+                                        contextB11_1.watch<KidList>().rowKidList),
+                                  )
+                                ]))),
+                        SizedBox(height: 194.w),
+                        Row(children: [
+                          SizedBox(
+                            width: 183.w,
+                            height: 50.w,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                debugPrint('아이 등록');
+                                showPopUpB11_2(contextB11_1);
+                              },
+                              child: Text('아이 등록',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 20.w)),
+                              style: ElevatedButton.styleFrom(
+                                  elevation: 1.0,
+                                  primary: const Color(0xFFA666FB),
+                                  onPrimary: const Color(0xFFFFFFFF),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  fixedSize: Size(200.w, 50.w)),
+                            ),
                           ),
-                        )
-                      ])
-                  )
-              ),
-              SizedBox(height: 194.w),
-              Row(children: [
-                SizedBox(
-                  width: 183.w,
-                  height: 50.w,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      debugPrint('아이 등록');
-                      showPopUpB11_2(contextB11_1);
-                    },
-                    child: Text('아이 등록',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 20.w)),
-                    style: ElevatedButton.styleFrom(
-                        elevation: 1.0,
-                        primary: const Color(0xFFA666FB),
-                        onPrimary: const Color(0xFFFFFFFF),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        fixedSize: Size(200.w, 50.w)),
-                  ),
-                ),
-                Container(
-                  width: 183.w,
-                  height: 50.w,
-                  margin: EdgeInsets.only(left: 40.w),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      debugPrint('아이 수정');
-                    },
-                    child: Text('아이 수정',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 20.w)),
-                    style: ElevatedButton.styleFrom(
-                        elevation: 1.0,
-                        primary: const Color(0xFFA666FB),
-                        onPrimary: const Color(0xFFFFFFFF),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        fixedSize: Size(200.w, 50.w)),
-                  ),
-                ),
-                Container(
-                  width: 183.w,
-                  height: 50.w,
-                  margin: EdgeInsets.only(left: 40.w),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      debugPrint('아이 반 바꾸기');
-                    },
-                    child: Text('아이 반 바꾸기',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 20.w)),
-                    style: ElevatedButton.styleFrom(
-                        elevation: 1.0,
-                        primary: const Color(0xFFA666FB),
-                        onPrimary: const Color(0xFFFFFFFF),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        fixedSize: Size(200.w, 50.w)),
-                  ),
-                ),
-                Container(
-                  width: 183.w,
-                  height: 50.w,
-                  margin: EdgeInsets.only(left: 40.w, right: 50.w),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      debugPrint('아이 등록 해제');
-                    },
-                    child: Text('아이 등록 해제',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 20.w)),
-                    style: ElevatedButton.styleFrom(
-                        elevation: 1.0,
-                        primary: const Color(0xFFA666FB),
-                        onPrimary: const Color(0xFFFFFFFF),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        fixedSize: Size(200.w, 50.w)),
-                  ),
-                )
-              ]),
-              SizedBox(height: 50.w)
-            ])
+                          Container(
+                            width: 183.w,
+                            height: 50.w,
+                            margin: EdgeInsets.only(left: 40.w),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                debugPrint('아이 수정');
+                                showPopUpB11_2_Update(contextB11_1);
+                              },
+                              child: Text('아이 수정',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 20.w)),
+                              style: ElevatedButton.styleFrom(
+                                  elevation: 1.0,
+                                  primary: const Color(0xFFA666FB),
+                                  onPrimary: const Color(0xFFFFFFFF),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  fixedSize: Size(200.w, 50.w)),
+                            ),
+                          ),
+                          Container(
+                            width: 183.w,
+                            height: 50.w,
+                            margin: EdgeInsets.only(left: 40.w),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                debugPrint('아이 반 바꾸기');
+                              },
+                              child: Text('아이 반 바꾸기',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 20.w)),
+                              style: ElevatedButton.styleFrom(
+                                  elevation: 1.0,
+                                  primary: const Color(0xFFA666FB),
+                                  onPrimary: const Color(0xFFFFFFFF),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  fixedSize: Size(200.w, 50.w)),
+                            ),
+                          ),
+                          Container(
+                            width: 183.w,
+                            height: 50.w,
+                            margin: EdgeInsets.only(left: 40.w, right: 50.w),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                debugPrint('아이 등록 해제');
+                              },
+                              child: Text('아이 등록 해제',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 20.w)),
+                              style: ElevatedButton.styleFrom(
+                                  elevation: 1.0,
+                                  primary: const Color(0xFFA666FB),
+                                  onPrimary: const Color(0xFFFFFFFF),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  fixedSize: Size(200.w, 50.w)),
+                            ),
+                          )
+                        ]),
+                        SizedBox(height: 50.w)
+                      ]);
+                })
           ],
         ),
       ],
