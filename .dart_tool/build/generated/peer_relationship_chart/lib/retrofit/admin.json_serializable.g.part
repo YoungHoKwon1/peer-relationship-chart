@@ -2,6 +2,17 @@
 // JsonSerializableGenerator
 // **************************************************************************
 
+ChangedInfo _$ChangedInfoFromJson(Map<String, dynamic> json) => ChangedInfo(
+      corrections: json['corrections'] as List<dynamic>,
+      correctionCount: json['correctionCount'] as int,
+    );
+
+Map<String, dynamic> _$ChangedInfoToJson(ChangedInfo instance) =>
+    <String, dynamic>{
+      'corrections': instance.corrections,
+      'correctionCount': instance.correctionCount,
+    };
+
 PwdCheckForm _$PwdCheckFormFromJson(Map<String, dynamic> json) => PwdCheckForm(
       password: json['password'] as String,
     );
@@ -18,13 +29,4 @@ Login2Token _$Login2TokenFromJson(Map<String, dynamic> json) => Login2Token(
 Map<String, dynamic> _$Login2TokenToJson(Login2Token instance) =>
     <String, dynamic>{
       'token': instance.token,
-    };
-
-AdminInfoMap _$AdminInfoMapFromJson(Map<String, dynamic> json) => AdminInfoMap(
-      admininfomap: json['admininfomap'] as Map<String, dynamic>,
-    );
-
-Map<String, dynamic> _$AdminInfoMapToJson(AdminInfoMap instance) =>
-    <String, dynamic>{
-      'admininfomap': instance.admininfomap,
     };

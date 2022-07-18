@@ -102,7 +102,6 @@ class _SplashScreenState extends State<SplashScreen> {
         switch(obj.runtimeType){
           case DioError:
             final res = (obj as DioError).response;
-            logger.e("Got error : ${res!.statusCode} -> ${res.statusMessage}");
             break;
           default:
             break;

@@ -6,6 +6,17 @@ part of 'admin.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+ChangedInfo _$ChangedInfoFromJson(Map<String, dynamic> json) => ChangedInfo(
+      corrections: json['corrections'] as List<dynamic>,
+      correctionCount: json['correctionCount'] as int,
+    );
+
+Map<String, dynamic> _$ChangedInfoToJson(ChangedInfo instance) =>
+    <String, dynamic>{
+      'corrections': instance.corrections,
+      'correctionCount': instance.correctionCount,
+    };
+
 PwdCheckForm _$PwdCheckFormFromJson(Map<String, dynamic> json) => PwdCheckForm(
       password: json['password'] as String,
     );
@@ -22,15 +33,6 @@ Login2Token _$Login2TokenFromJson(Map<String, dynamic> json) => Login2Token(
 Map<String, dynamic> _$Login2TokenToJson(Login2Token instance) =>
     <String, dynamic>{
       'token': instance.token,
-    };
-
-AdminInfoMap _$AdminInfoMapFromJson(Map<String, dynamic> json) => AdminInfoMap(
-      admininfomap: json['admininfomap'] as Map<String, dynamic>,
-    );
-
-Map<String, dynamic> _$AdminInfoMapToJson(AdminInfoMap instance) =>
-    <String, dynamic>{
-      'admininfomap': instance.admininfomap,
     };
 
 // **************************************************************************
@@ -106,6 +108,23 @@ class _RestAdminClient implements RestAdminClient {
     final _result = await _dio.fetch(_setStreamType<dynamic>(
         Options(method: 'GET', headers: _headers, extra: _extra)
             .compose(_dio.options, '$imageName',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data;
+    return value;
+  }
+
+  @override
+  Future<dynamic> putChildInfo(token2, changedInfo) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'authorization': token2};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(changedInfo.toJson());
+    final _result = await _dio.fetch(_setStreamType<dynamic>(
+        Options(method: 'PUT', headers: _headers, extra: _extra)
+            .compose(_dio.options, '/api/atti/child',
                 queryParameters: queryParameters, data: _data)
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data;

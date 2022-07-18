@@ -44,7 +44,6 @@ class Versions{
   });
 
   factory Versions.fromJson(Map<String, dynamic> json) => _$VersionsFromJson(json);
-
   Map<String, dynamic> toJson() => _$VersionsToJson(this);
 }
 

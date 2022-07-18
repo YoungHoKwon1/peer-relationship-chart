@@ -479,9 +479,7 @@ class _NewSurveyState extends State<NewSurvey> {
             return obj.response;
           });
           print("push_C1");
-          Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => C1()),);
+          Navigator.push(context, MaterialPageRoute(builder: (context) => C1()),);
 
         },
       ),

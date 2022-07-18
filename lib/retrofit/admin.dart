@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
@@ -27,6 +28,25 @@ abstract class RestAdminClient {
       @Header('authorization') String token,
       @Path('imagePath') String imageName,
       );
+  @PUT('/api/atti/child')
+  Future<dynamic> putChildInfo(
+      @Header('authorization') String token2,
+      @Body() ChangedInfo changedInfo
+      );
+}
+
+@JsonSerializable()
+class ChangedInfo {
+  //FormData formData;
+  List<dynamic> corrections;
+  int correctionCount;
+  ChangedInfo({
+    //required this.formData,
+    required this.corrections,
+    required this.correctionCount
+  });
+  factory ChangedInfo.fromJson(Map<String, dynamic> json) => _$ChangedInfoFromJson(json);
+  Map<String, dynamic> toJson() => _$ChangedInfoToJson(this);
 }
 
 @JsonSerializable()
@@ -50,23 +70,4 @@ class Login2Token{
   Map<String, dynamic> toJson() => _$Login2TokenToJson(this);
 }
 
-//admin정보 받을 Map
-// @JsonSerializable()
-// class AdminInfoList{
-//   List<dynamic> admininfolist;
-//   AdminInfoList({
-//     required this.admininfolist
-// });
-//   factory AdminInfoList.fromJson(Map<String, dynamic> json) => _$AdminInfoListFromJson(json);
-//   Map<String, dynamic> toJson() => _$AdminInfoListToJson(this);
-// }
 
-@JsonSerializable()
-class AdminInfoMap{
-  Map<String, dynamic> admininfomap;
-  AdminInfoMap({
-    required this.admininfomap
-  });
-  factory AdminInfoMap.fromJson(Map<String, dynamic> json) => _$AdminInfoMapFromJson(json);
-  Map<String, dynamic> toJson() => _$AdminInfoMapToJson(this);
-}

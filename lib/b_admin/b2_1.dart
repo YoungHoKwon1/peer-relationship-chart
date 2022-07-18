@@ -233,6 +233,7 @@ class _ListViewInfoState extends State<ListViewInfo> {
                                 Map<String, String> headers = new Map();
                                 headers['authorization'] = token!;
                                 Image childImage = Image.network("http://192.168.0.7:8080/" + value['imagePath'], headers: headers,height: 70.w, width: 70.w, fit: BoxFit.cover,);
+                                list1.add(value['identification']);
                                 list1.add(childImage);
                                 list1.add(value['name']);
                                 list1.add(value['birthday']);
@@ -240,7 +241,7 @@ class _ListViewInfoState extends State<ListViewInfo> {
                                 list1.add(value['comment']);
                                 Provider.of<KidList>(context, listen: false).getKid(list1); //provider 송금
                               }
-                              print('최종 _rowKidList: ${Provider.of<KidList>(context, listen: false).rowKidList}');
+                              //print('최종 _rowKidList: ${Provider.of<KidList>(context, listen: false).rowKidList}');
                               widget.notifyParent!(i);
                             }
                             widget.notifyParent!(i);

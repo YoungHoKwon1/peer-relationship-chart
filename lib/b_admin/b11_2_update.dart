@@ -35,6 +35,7 @@ void update(BuildContext context) async {
     }
     return obj.response;
   });
+  //print(response);
   Provider.of<KidList>(context, listen: false).clearKid();
   for (Map value in response) {
     List<dynamic> list1 = [];
@@ -48,6 +49,7 @@ void update(BuildContext context) async {
       width: 70.w,
       fit: BoxFit.cover,
     );
+    list1.add(value['identification'].toString());
     list1.add(childImage);
     list1.add(value['name']);
     list1.add(value['birthday']);
@@ -55,6 +57,53 @@ void update(BuildContext context) async {
     list1.add(value['comment']);
     Provider.of<KidList>(context, listen: false).updateKid(list1); //provider 송금
     //print('update: ${Provider.of<KidList>(context, listen: false).rowKidList}');
+  }
+}
+
+void save(BuildContext context) async {
+  Dio dio = Dio();
+  final client = RestAdminClient(dio);
+  final token = await autoLoginStorage.read(
+      key: "signInToken");
+  final response = await client
+      .getChildInfo(token.toString())
+      .catchError((Object obj) {
+    final res = (obj as DioError).response;
+    switch (res!.statusCode) {
+      case 401:
+        print('401 : 유효하지 않은 토큰21입니다.');
+        break;
+      case 419:
+        print('419 : 토큰이 만료되었습니다.');
+        break;
+      case 500:
+        print('500 : 서버 에러.');
+        break;
+      default:
+        break;
+    }
+    return obj.response;
+  });
+  //print(response);
+  for (Map value in response) {
+    List<dynamic> list1 = [];
+    Map<String, String> headers = new Map();
+    headers['authorization'] = token!;
+    Image childImage = Image.network(
+      "http://192.168.0.7:8080/" +
+          value['imagePath'],
+      headers: headers,
+      height: 70.w,
+      width: 70.w,
+      fit: BoxFit.cover,
+    );
+    list1.add(value['identification'].toString());
+    list1.add(childImage);
+    list1.add(value['name']);
+    list1.add(value['birthday']);
+    list1.add(value['sex']);
+    list1.add(value['comment']);
+    Provider.of<KidList>(context, listen: false).saveKid(list1); //provider 송금
   }
 }
 
@@ -168,7 +217,8 @@ void showPopUpB11_2_Update(context) {
                             child: ElevatedButton(
                               onPressed: () {
                                 debugPrint('저장');
-                                Navigator.pop(contextB11_2_Update); //result 반영 dialog 종료
+                                save(contextProvider);
+                                //Navigator.pop(contextB11_2_Update); //result 반영 dialog 종료
                               },
                               child: const Text('저장',
                                   style: TextStyle(
