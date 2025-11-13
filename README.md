@@ -27,7 +27,5 @@ Enable **peer relationship analysis** and enhance **smart kindergarten managemen
 
 ## Tech Stack  
 *(Add or modify based on actual implementation)*  
-- **Frontend:** React / Vue / (or other framework used)  
-- **Backend Communication:** REST API  
-- **Visualization:** D3.js / Chart.js / Cytoscape.js  
-- **Development Focus:** Data visualization, CRUD automation, supervisor UX/UI  
+- **Frontend:** Flutter 
+- **Backend Communication:** HTTP (REST API)
